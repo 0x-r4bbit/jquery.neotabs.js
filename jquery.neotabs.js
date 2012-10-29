@@ -20,16 +20,24 @@
         firstTabClass: 'first', // Classname for the first tab
         lastTabClass: 'last', // Classname for the last tab
         clearfixClass: 'group', // Name of the class that is used to clear floats
-      };
+      },
+      tabsCount = 0;
+
+  if ($('body').data('accessibleTabsCount') !== undefined) {
+    tabsCount = $('body').data('accessibleTabsCount');
+  }
+
+  $('body').data('accessibleTabsCount', tabsCount);
 
   // Constructor
   function NeoTabs(element, options) {
-    _this = this;
+    var _this = this;
 
     $.extend(_this, {
       $el: element,
       options: $.extend({}, defaults, options)
     });
+
 
     // This represents our tab list
     var tabs = new TabList();
@@ -40,23 +48,30 @@
 
       // And create a new tab object from it
       var tab = new Tab({
-        label: $currentEl.html(),
-        id: $currentEl.attr('id')
+        label:  $currentEl.html(),
+        cssClass: $currentEl.attr('class'),
+        id: 'accessibletabscontent' + tabsCount + '-' + i
       });
 
       // Allright, we're done!
       tabs.addTab(tab);
+
     });
 
+    // Increment the tab count
+    tabsCount++
   };
 
   function Tab(options) {
-    this.id = options.id;
-    this.label = options.label;
+    this.options = options;
 
-    if (this.id) {
-
+    if (this.options.cssClass) {
+      this.options.cssClass = ' css="' + this.options.cssClass + '"';
     }
+  };
+
+  Tab.prototype.toHtml = function () {
+    return '<li><a id="' + this.options.id + '"' + this.options.cssClass + '></a></li>';
   };
 
   function TabList() {
@@ -67,7 +82,7 @@
     this.tabs.push(tab);
   };
 
-  $.fn[pluginName] = function ( options ) {
+  $.fn[pluginName] = function (options) {
     return this.each(function () {
       if (!$.data(this, 'plugin_' + pluginName)) {
         $.data(this, 'plugin_' + pluginName, new NeoTabs($(this), options ));
