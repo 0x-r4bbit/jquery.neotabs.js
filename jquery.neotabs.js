@@ -31,16 +31,14 @@
 
   // Constructor
   function NeoTabs(element, options) {
-    var _this = this;
+    var _this = this,
+        tabs = dropdownTabs = new TabList(),
+        hasDropdown = false;
 
     $.extend(_this, {
       $el: element,
       options: $.extend({}, defaults, options)
     });
-
-
-    // This represents our tab list
-    var tabs = new TabList();
 
     _this.$el.find(_this.options.tabheadElement).each(function (i) {
       // Let's cache this query
@@ -52,7 +50,7 @@
         cssClass: $currentEl.attr('class'),
         id: 'accessibletabscontent' + tabsCount + '-' + i
       });
-      
+
       // Allright, we're done!
       tabs.addTab(tab);
 
