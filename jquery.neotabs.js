@@ -8,7 +8,7 @@
         wrapperClass: 'content', // Classname to apply to the div that wraps
         activeClass: 'active', // Active tab classname
         tabheadElement: 'h4', // Elements to transform to tabs
-        tabheadClass: '.tab', // Tab classname
+        tabheadClass: 'tab', // Tab classname
         tabbody: '.tabbody', // Tabbody classname
         fx: 'show', // Default effect for collapsing content
         fxSpeed: 'normal', // Effect speed
@@ -52,10 +52,15 @@
         cssClass: $currentEl.attr('class'),
         id: 'accessibletabscontent' + tabsCount + '-' + i
       });
-
+      
       // Allright, we're done!
       tabs.addTab(tab);
 
+      $currentEl.attr({
+        'id': tab.id,
+        'class': _this.options.tabheadClass,
+        'tabindex': '-1'
+      });
     });
 
     // Increment the tab count
@@ -79,6 +84,7 @@
   };
 
   TabList.prototype.addTab = function (tab) {
+    // Simply push a new tab to existing tabs list
     this.tabs.push(tab);
   };
 
