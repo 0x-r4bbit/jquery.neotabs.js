@@ -32,7 +32,8 @@
   // Constructor
   function NeoTabs(element, options) {
     var _this = this,
-        tabs = dropdownTabs = new TabList(),
+        tabs = new TabList(),
+        dropdownTabs = new TabList(),
         hasDropdown = false;
 
     $.extend(_this, {
@@ -44,6 +45,11 @@
       // Let's cache this query
       var $currentEl = $(this);
 
+      // Do we have to generate a sublist for a dropdown?
+      if (!hasDropdown && typeof($currentEl.data('dropdown')) != 'undefined') {
+        hasDropdown = true;
+      }
+
       // And create a new tab object from it
       var tab = new Tab({
         label:  $currentEl.html(),
@@ -51,8 +57,11 @@
         id: 'accessibletabscontent' + tabsCount + '-' + i
       });
 
-      // Allright, we're done!
-      tabs.addTab(tab);
+      if (hasDropdown) {
+        dropdownTabs.addTab(tab);
+      } else {
+        tabs.addTab(tab);
+      }
 
       $currentEl.attr({
         'id': tab.id,
@@ -60,6 +69,9 @@
         'tabindex': '-1'
       });
     });
+    
+    console.log(tabs);
+    console.log(dropdownTabs);
 
     // Increment the tab count
     tabsCount++
