@@ -22,11 +22,11 @@
         clearfixClass: 'group',
         tabsListClass: 'tabs-list',
         tabHeadElement: 'h4',
+        tabsPosition: 'top',
         cssClassAvailable: false,
         fx: 'show',
         fxSpeed: 'normal',
         autoAnchor: false,
-        tabsPosition: 'top',
         wrapInnerTabs: '',
         dropdownTabLabel: '&#x25BE;'
       },
@@ -102,16 +102,39 @@
       }));
     }
 
-    var $content = _this.$el.find('.' + _this.options.tabBodyClass);
+    var $content = _this.$el.find('.' + _this.options.tabBodyClass),
+        $tabsList = _this.$el.find('.' + _this.options.tabsListClass);
 
     if ($content.length > 0) {
       $content.hide();
       $($content[0]).show();
     }
 
-    _this.$el.find('.' + _this.options.tabsListClass + ' > li:first')
+    $tabsList.find(' > li:first')
       .addClass(_this.options.activeClass + ' ' + _this.options.firstTabClass)
       .closest('ul').children('li:last').addClass(_this.options.lastTabClass);
+
+    if (_this.options.wrapInnerTabs) {
+      $tabsList.find('> li > a').wrapInner(_this.options.wrapInnerTabs);
+    }
+
+    $tabsList.find('> li a').each(function (i) {
+      $tab = $(this);
+      $tabBody = _this.$el.find('.' + _this.options.tabBodyClass);
+
+      $tab.on('click', function (e) {
+        e.preventDefault();
+        _this.$el.trigger('showTab.accessibleTabs', [$tab]);
+
+        $tabsList
+          .find('>li .' + _this.options.activeClass)
+          .removeClass(_this.options.activeClass);
+
+        $tab.blur();
+        _this.$el.find('.' + _this.options.tabBodyClass + ':visible').hide();
+        $tabBody.eq(i)[_this.options.fx](_this.options.fxSpeed);
+      });
+    });
 
     tabCount++;
   }
@@ -123,7 +146,7 @@
   };
 
   Tab.prototype.toHtml = function () {
-    var html = '<li><a id="' + this.id + '">' + this.label + '</a>';
+    var html = '<li><a href="#' + this.id + '">' + this.label + '</a>';
 
     if (this.tabList) {
       html += this.tabList.toHtml({
