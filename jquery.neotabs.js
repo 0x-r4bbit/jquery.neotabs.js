@@ -128,7 +128,6 @@
 
     $tabsList.find('> li a').each(function (i) {
       $tab = $(this);
-      $tabBody = _this.$el.find('.' + _this.options.tabBodyClass);
 
       $tab.on('click', function (e) {
         e.preventDefault();
@@ -144,11 +143,13 @@
         if (!$(this).parent().hasClass(_this.options.dropdownTabClass)) {
           _this.$el.find('.' + _this.options.tabBodyClass + ':visible').hide();
 
-          if ($(this).closest('.dropdown').length) {
-            i = i-1;
+          var j = i;
+
+          if ($(this).closest('.' + _this.options.dropdownTabClass).length) {
+            j = i-1;
           }
 
-          $tabBody.eq(i)[_this.options.fx](_this.options.fxSpeed);
+          _this.$el.find('.' + _this.options.tabBodyClass).eq(j)[_this.options.fx](_this.options.fxSpeed);
         }
       });
     });
