@@ -25,7 +25,7 @@
         tabsPosition: 'top',
         cssClassAvailable: true,
         fx: 'show',
-        fxSpeed: 'normal',
+        fxSpeed: 0,
         autoAnchor: true,
         wrapInnerTabs: '',
         dropdownTabLabel: '&#x25BE;',
