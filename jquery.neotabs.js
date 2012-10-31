@@ -1,60 +1,74 @@
-;(function ( $, window, undefined ) {
+/**
+ * NeoTabs - jQuery plugin
+ *
+ * source: http://github.com/PascalPrecht/jQuery-NeoTabs/
+ * site: http://pascalprecht.github.com/jQuery-NeoTabs/
+ *
+ * @author: Pascal Precht <pascal.precht@gmail.com>
+ * Released under the MIT and GPL Licenses.
+ */
+;(function ($, window, undefined) {
 
   var pluginName = 'neoTabs',
       document = window.document,
 
-      // Default options
       defaults = {
-        wrapperClass: 'content', // Classname to apply to the div that wraps
-        activeClass: 'active', // Active tab classname
-        tabheadElement: 'h4', // Elements to transform to tabs
-        tabheadClass: 'tab', // Tab classname
-        tabbody: '.tabbody', // Tabbody classname
-        fx: 'show', // Default effect for collapsing content
-        fxSpeed: 'normal', // Effect speed
-        tabsListClass: 'tabs-list', // Classname to apply to generated tabs list
-        cssClassAvailable:false, // Applying original class names to tabs or not
-        autoAnchor: false, // Making tabs linkable
-        tabsPostion: 'top', // Position of tabs 'top' or 'bottom'
-        wrapInnerTabs: '', // InnerWrap for tabs
-        firstTabClass: 'first', // Classname for the first tab
-        lastTabClass: 'last', // Classname for the last tab
-        clearfixClass: 'group', // Name of the class that is used to clear floats
+        wrapperClass: 'content',
+        activeClass: 'active',
+        tabHeadClass: 'tab',
+        tabBodyClass: 'tabbody',
+        firstTabClass: 'first',
+        lastTabClass: 'last',
+        clearfixClass: 'group',
+        tabsListClass: 'tabs-list',
+        tabHeadElement: 'h4',
+        cssClassAvailable: false,
+        fx: 'show',
+        fxSpeed: 'normal',
+        autoAnchor: false,
+        tabsPosition: 'top',
+        wrapInnerTabs: '',
+        dropdownTabLabel: '&#x25BE;'
       },
-      tabsCount = 0;
+
+      tabCount = 0,
+      positions = {
+        top: 'prepend',
+        bottom: 'append'
+      };
 
   if ($('body').data('accessibleTabsCount') !== undefined) {
-    tabsCount = $('body').data('accessibleTabsCount');
+    tabCount = $('body').data('accessibleTabsCount');
   }
 
-  $('body').data('accessibleTabsCount', tabsCount);
+  $('body').data('accessibleTabsCount', tabCount);
 
-  // Constructor
   function NeoTabs(element, options) {
     var _this = this,
         tabs = new TabList(),
-        dropdownTabs = new TabList(),
-        hasDropdown = false;
+        dropdownTabs = null,
+        hasDropdown = false,
+        count = 0;
 
     $.extend(_this, {
       $el: element,
       options: $.extend({}, defaults, options)
     });
 
-    _this.$el.find(_this.options.tabheadElement).each(function (i) {
-      // Let's cache this query
-      var $currentEl = $(this);
 
-      // Do we have to generate a sublist for a dropdown?
-      if (!hasDropdown && typeof($currentEl.data('dropdown')) != 'undefined') {
+    _this.$el.find(_this.options.tabHeadElement).each(function (i) {
+
+      var $tabHeadElement = $(this);
+
+      if (!hasDropdown && typeof($tabHeadElement.data('dropdown')) != 'undefined') {
         hasDropdown = true;
+        dropdownTabs = new TabList();
       }
 
-      // And create a new tab object from it
       var tab = new Tab({
-        label:  $currentEl.html(),
-        cssClass: $currentEl.attr('class'),
-        id: 'accessibletabscontent' + tabsCount + '-' + i
+        label:  $tabHeadElement.html(),
+        id: 'accessibletabscontent' + tabCount + '-' + i,
+        tabList: null
       });
 
       if (hasDropdown) {
@@ -63,30 +77,61 @@
         tabs.addTab(tab);
       }
 
-      $currentEl.attr({
+      $tabHeadElement.attr({
         'id': tab.id,
         'class': _this.options.tabheadClass,
         'tabindex': '-1'
       });
-    });
-    
-    console.log(tabs);
-    console.log(dropdownTabs);
 
-    // Increment the tab count
-    tabsCount++
-  };
+      count = i;
+    });
+
+    if (hasDropdown) {
+      tabs.addTab(new Tab({
+        label: _this.options.dropdownTabLabel,
+        id: 'accessibletabscontent' + tabCount + '-' + count,
+        tabList: dropdownTabs
+      }));
+    }
+
+    if (!_this.$el.find('.' + _this.options.tabsListClass).length) {
+      _this.$el[positions[_this.options.tabsPosition]](tabs.toHtml({
+        clearfixClass: _this.options.clearfixClass,
+        tabsListClass: _this.options.tabsListClass
+      }));
+    }
+
+    var $content = _this.$el.find('.' + _this.options.tabBodyClass);
+
+    if ($content.length > 0) {
+      $content.hide();
+      $($content[0]).show();
+    }
+
+    _this.$el.find('.' + _this.options.tabsListClass + ' > li:first-child').
+      addClass(_this.options.activeClass + ' ' + _this.options.firstTabClass);
+
+    tabCount++;
+  }
 
   function Tab(options) {
-    this.options = options;
-
-    if (this.options.cssClass) {
-      this.options.cssClass = ' css="' + this.options.cssClass + '"';
-    }
+    this.label = options.label,
+    this.id = options.id;
+    this.tabList = options.tabList;
   };
 
   Tab.prototype.toHtml = function () {
-    return '<li><a id="' + this.options.id + '"' + this.options.cssClass + '></a></li>';
+    var html = '<li><a id="' + this.id + '">' + this.label + '</a>';
+
+    if (this.tabList) {
+      html += this.tabList.toHtml({
+        clearfixClass: '',
+        tabsListClass: 'tabDropdownList'
+      });
+    }
+
+    html += '</li>';
+    return html;
   };
 
   function TabList() {
@@ -94,8 +139,21 @@
   };
 
   TabList.prototype.addTab = function (tab) {
-    // Simply push a new tab to existing tabs list
     this.tabs.push(tab);
+  };
+
+  TabList.prototype.toHtml = function (options) {
+    this.clearfixClass = options.clearfixClass;
+    this.tabsListClass = options.tabsListClass;
+
+    var len = this.tabs.length,
+        i = 0,
+        html = '<ul class="' + this.clearfixClass + ' ' + this.tabsListClass + '">';
+
+    for (; i < len; i++) {
+      html += this.tabs[i].toHtml();
+    }
+    return html;
   };
 
   $.fn[pluginName] = function (options) {
