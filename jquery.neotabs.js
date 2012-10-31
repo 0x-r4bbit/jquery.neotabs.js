@@ -15,7 +15,7 @@
       defaults = {
         wrapperClass: 'content',
         activeClass: 'active',
-        tabHeadClass: 'tab',
+        tabHeadClass: 'tabhead',
         tabBodyClass: 'tabbody',
         firstTabClass: 'first',
         lastTabClass: 'last',
@@ -122,7 +122,7 @@
 
     $tabsList.find(' > li:first')
       .addClass(_this.options.activeClass + ' ' + _this.options.firstTabClass)
-      .closest('ul').children('li:last').addClass(_this.options.lastTabClass);
+      .closest('ul').find('> li:last').addClass(_this.options.lastTabClass);
 
     if (_this.options.wrapInnerTabs) {
       $tabsList.find('> li > a').wrapInner(_this.options.wrapInnerTabs);
