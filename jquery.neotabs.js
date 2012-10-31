@@ -134,8 +134,6 @@
       $tab.on('click', function (e) {
         e.preventDefault();
 
-        _this.$el.trigger('showTab.accessibleTabs', [$tab]);
-
         $tabsList
           .find('>li.' + _this.options.activeClass)
           .removeClass(_this.options.activeClass);
