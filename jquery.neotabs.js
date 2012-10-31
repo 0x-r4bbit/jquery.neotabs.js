@@ -23,7 +23,7 @@
         tabsListClass: 'tabs-list',
         tabHeadElement: 'h4',
         tabsPosition: 'top',
-        cssClassAvailable: false,
+        cssClassAvailable: true,
         fx: 'show',
         fxSpeed: 'normal',
         autoAnchor: false,
@@ -31,7 +31,7 @@
         dropdownTabLabel: '&#x25BE;',
         dropdownTabClass: 'dropdown',
         dropdownTabsListClass: 'tabs-list',
-        dropdownTabsClearfixClass: ''
+        dropdownTabsClearfixClass: 'group'
       },
 
       tabCount = 0,
@@ -79,7 +79,7 @@
         label:  $tabHeadElement.html(),
         id: 'accessibletabscontent' + tabCount + '-' + i,
         tabList: null,
-        cssClass: $tabHeadElement.attr('class')
+        cssClass: (_this.options.cssClassAvailable) ? $tabHeadElement.attr('class') : ''
       });
 
       if (hasDropdown) {
@@ -132,16 +132,24 @@
 
       $tab.on('click', function (e) {
         e.preventDefault();
+
         _this.$el.trigger('showTab.accessibleTabs', [$tab]);
 
         $tabsList
           .find('>li .' + _this.options.activeClass)
           .removeClass(_this.options.activeClass);
 
-        $(this).blur();
-        _this.$el.find('.' + _this.options.tabBodyClass + ':visible').hide();
         $(this).parent().addClass(_this.options.activeClass);
-        $tabBody.eq(i)[_this.options.fx](_this.options.fxSpeed);
+
+        if (!$(this).parent().hasClass(_this.options.dropdownTabClass)) {
+          _this.$el.find('.' + _this.options.tabBodyClass + ':visible').hide();
+
+          if ($(this).closest('.dropdown').length) {
+            i = i-1;
+          }
+
+          $tabBody.eq(i)[_this.options.fx](_this.options.fxSpeed);
+        }
       });
     });
 
