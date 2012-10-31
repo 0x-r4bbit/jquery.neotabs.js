@@ -1,6 +1,6 @@
 # jQuery NeoTabs
 
-A flexible jQuery plugin for generating accessible tabs inspired by 
+A flexible jQuery plugin for generating accessible tabs **AND**  tabs as dropdown inspired by 
 [Dirk Ginader's Accessible-Tabs](http://github.com/ginader/Accessible-Tabs)
 
 ## What? Another jQuery Plugin for Accessible Tabs?
@@ -16,9 +16,18 @@ The first thought was to take Accessible-Tabs and extend it for my needs and may
 
 I've never written a jQuery Plugin before and I also never would, If I know that there's a plugin which fits to my needs. So **the goal of NeoTabs is to close this little gap** and provide a jQuery Plugin which is as accessible as Dirk Ginader's  Accessible-Tabs Plugin and is also extendable via lightweight extensions sitting on top of it.
 
-## Okay, got it! Gimme the Code!
+**Attention:**
+The current version **does not** support all of Accesssible-Tabs features. This includes:
 
-Fo sho! Just jump to the [documentation](http://github.com/PascalPrecht/jquery.neotabs.js#Documentation)!
+- SyncHeights
+- Info texts (known as 'currentInfoText')
+- SaveState (Using Cookies)
+- Pagination
+- Keyboard support  
+ 
+## Okay got it, where can I start?
+
+Easy-peasy! Just checkout the [documentation](http://github.com/PascalPrecht/jquery.neotabs.js#documentation) or jump directly to the [Installation section](http://github.com/PascalPrecht/jquery.neotabs.js#installation).  
 
 #### One last thing: Why "NeoTabs"?** 
 
@@ -26,7 +35,14 @@ Fo sho! Just jump to the [documentation](http://github.com/PascalPrecht/jquery.n
 
 ## Documentation
 
-Coming soon...
+### Installation
+
+To get started, just [download](http://github.com/PascalPrecht/jquery.neotabs.js/downloads) the code from GitHub or open your beautiful CLI to do some cloning with:
+
+````
+git clone http://github.com/PascalPrecht/jquery.neotabs.js.git
+````
+  
 
 ## License
 
