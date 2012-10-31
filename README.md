@@ -42,7 +42,124 @@ To get started, just [download](http://github.com/PascalPrecht/jquery.neotabs.js
 ````
 git clone http://github.com/PascalPrecht/jquery.neotabs.js.git
 ````
-  
+
+NeoTabs sits on top of jQuery, so please include jQuery first:
+
+````
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset=utf-8>
+    <title>jQuery NeoTabs</title>
+  </head>
+
+  <body>
+
+    <script src=path/to/jquery/source></script>
+    <script src=path/to/jquery.neotabs.js></script>
+  </body>
+</html>
+````
+
+### Usage
+
+NeoTabs is built to make progressively enhanced tabbed-content. Progressively enhanced means, you start by writing well-formed and semantic markup. So, this is how it should look like:
+
+#### The Markup
+
+````
+<html lang="en">
+  <head>
+    <meta charset=utf-8>
+    <title>jQuery NeoTabs</title>
+  </head>
+
+  <body>
+
+    <div class=tabs>
+      <div class=tabbody>
+        <h4>Tabbody Heading</h4>
+
+        <p>Lorem Ipsum</p>
+      </div>
+
+      <div class=tabbody>
+        <h4>Tabbody Heading 2</h2>
+
+        <p>Lorem Ipsum wakka wakka</p>
+      </div>
+    </div>
+
+    <script src=path/to/jquery/source></script>
+    <script src=path/to/jquery.neotabs.js></script>
+  </body>
+</html>
+````
+
+Easy hah? Now to make this beautiful valid HTML5 Markup behave like a tabbed-content, all you have to do is to call the NeoTabs plugin on it.
+
+#### The JavaScript
+
+````
+<html lang="en">
+  <head>
+    <meta charset=utf-8>
+    <title>jQuery NeoTabs</title>
+  </head>
+
+  <body>
+
+    <div class=tabs>
+      <div class=tabbody>
+        <h4>Tabbody Heading</h4>
+
+        <p>Lorem Ipsum</p>
+      </div>
+
+      <div class=tabbody>
+        <h4>Tabbody Heading 2</h4>
+
+        <p>Lorem Ipsum wakka wakka</p>
+      </div>
+    </div>
+
+    <script src=path/to/jquery/source></script>
+    <script src=path/to/jquery.neotabs.js></script>
+    <script>
+      $('.tabs').neoTabs();
+    </script>
+  </body>
+</html>
+````
+Boom. That's all. NeoTabs generates a list from your heading elements and make them behave like tabs. But what if my markup differs from the code above? No problem mucho. NeoTabs is pretty flexible when it comes to customization.
+
+### Options
+
+NeoTabs provides a huge list of options to customize the generated markup. The list below shows'em all up with their default values and a short description:
+
+````
+$('.tabs').neoTabs({
+  wrapperClass: 'content', // Classname of div to apply around the content
+  activeClass: 'active', // Classname to apply to active tab
+  tabHeadClass: 'tabhead', // Classname to apply to each generated tab
+  tabBodyClass: 'tabbody', // Classname which describes the body of a tab content
+  firstTabClass: 'first', // Classname to apply to the first tab of a tabs list
+  lastTabClass: 'last', // Classname to apply to the last tab of a tabs list
+  clearfixClass: 'group', // Class name for clearfix
+  tabsListClass: 'tabs-list', // Classname to apply to a tabs list
+  tabHeadElement: 'h4', // Selector which represents a tab
+  tabsPosition: 'top', // Tabs-list position 'top' || 'bottom'
+  cssClassAvailable: true, // Applying existing classes from tabHeadElement to tab
+  fx: 'show', // Collapsing effect
+  fxSpeed: 0, // Effect speed in milliseconds
+  autoAnchor: true, // Making tabs linkable or not
+  wrapInnerTabs: '', // Fragment for tab inner wrapping
+  dropdownTabLabel: '&#x25BE;', // Dropdown tab label
+  dropdownTabClass: 'dropdown', // Classname to apply to tab which represents a dropdown
+  dropdownTabsListClass: 'tabs-list', // Classname to apply to tabs list within a dropdown
+  dropdownTabsClearfixClass: 'group' // Clearfix for dropdown
+});
+````
 
 ## License
 
