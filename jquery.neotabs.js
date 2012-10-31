@@ -55,6 +55,7 @@
       options: $.extend({}, defaults, options)
     });
 
+    _this.$el.wrapInner('<div class="'+_this.options.wrapperClass+'"></div>');
 
     _this.$el.find(_this.options.tabHeadElement).each(function (i) {
 
@@ -108,8 +109,9 @@
       $($content[0]).show();
     }
 
-    _this.$el.find('.' + _this.options.tabsListClass + ' > li:first-child').
-      addClass(_this.options.activeClass + ' ' + _this.options.firstTabClass);
+    _this.$el.find('.' + _this.options.tabsListClass + ' > li:first')
+      .addClass(_this.options.activeClass + ' ' + _this.options.firstTabClass)
+      .closest('ul').children('li:last').addClass(_this.options.lastTabClass);
 
     tabCount++;
   }
@@ -153,6 +155,7 @@
     for (; i < len; i++) {
       html += this.tabs[i].toHtml();
     }
+
     return html;
   };
 
