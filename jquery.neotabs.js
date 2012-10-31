@@ -26,7 +26,7 @@
         cssClassAvailable: true,
         fx: 'show',
         fxSpeed: 'normal',
-        autoAnchor: false,
+        autoAnchor: true,
         wrapInnerTabs: '',
         dropdownTabLabel: '&#x25BE;',
         dropdownTabClass: 'dropdown',
@@ -79,7 +79,9 @@
         label:  $tabHeadElement.html(),
         id: 'accessibletabscontent' + tabCount + '-' + i,
         tabList: null,
-        cssClass: (_this.options.cssClassAvailable) ? $tabHeadElement.attr('class') : ''
+        cssClass: (_this.options.cssClassAvailable) ? 
+          $tabHeadElement.attr('class') + ' ' + _this.options.tabHeadClass :
+          _this.options.tabHeadClass
       });
 
       if (hasDropdown) {
@@ -154,6 +156,12 @@
       });
     });
 
+    if (_this.options.autoAnchor && window.location.hash) {
+      $anchorTab = $('.' + _this.options.tabsListClass).find(window.location.hash);
+      if ($anchorTab.size()) {
+        $anchorTab.click();
+      }
+    }
     tabCount++;
   }
 
@@ -165,7 +173,7 @@
   };
 
   Tab.prototype.toHtml = function () {
-    var html = '<li class="' + this.cssClass + '"><a href="#' + this.id + '">' + this.label + '</a>';
+    var html = '<li class="' + this.cssClass + '"><a href="#' + this.id + '" id="' + this.id + '">' + this.label + '</a>';
 
 
     if (this.tabList) {
