@@ -28,7 +28,10 @@
         fxSpeed: 'normal',
         autoAnchor: false,
         wrapInnerTabs: '',
-        dropdownTabLabel: '&#x25BE;'
+        dropdownTabLabel: '&#x25BE;',
+        dropdownTabClass: 'dropdown',
+        dropdownTabsListClass: 'tabs-list',
+        dropdownTabsClearfixClass: ''
       },
 
       tabCount = 0,
@@ -45,7 +48,6 @@
 
   function NeoTabs(element, options) {
     var _this = this,
-        tabs = new TabList(),
         dropdownTabs = null,
         hasDropdown = false,
         count = 0;
@@ -55,21 +57,29 @@
       options: $.extend({}, defaults, options)
     });
 
+    var tabs = new TabList({
+          clearfixClass: _this.options.clearfixClass,
+          tabsListClass: _this.options.tabsListClass
+        });
+
     _this.$el.wrapInner('<div class="'+_this.options.wrapperClass+'"></div>');
 
     _this.$el.find(_this.options.tabHeadElement).each(function (i) {
 
       var $tabHeadElement = $(this);
-
       if (!hasDropdown && typeof($tabHeadElement.data('dropdown')) != 'undefined') {
         hasDropdown = true;
-        dropdownTabs = new TabList();
+        dropdownTabs = new TabList({
+          clearfixClass: _this.options.dropdownTabsClearfixClass,
+          tabsListClass: _this.options.dropdownTabsListClass
+        });
       }
 
       var tab = new Tab({
         label:  $tabHeadElement.html(),
         id: 'accessibletabscontent' + tabCount + '-' + i,
-        tabList: null
+        tabList: null,
+        cssClass: $tabHeadElement.attr('class')
       });
 
       if (hasDropdown) {
@@ -90,16 +100,14 @@
     if (hasDropdown) {
       tabs.addTab(new Tab({
         label: _this.options.dropdownTabLabel,
-        id: 'accessibletabscontent' + tabCount + '-' + count,
-        tabList: dropdownTabs
+        id: '',
+        tabList: dropdownTabs,
+        cssClass: _this.options.tabHeadClass + ' ' + _this.options.dropdownTabClass
       }));
     }
 
     if (!_this.$el.find('.' + _this.options.tabsListClass).length) {
-      _this.$el[positions[_this.options.tabsPosition]](tabs.toHtml({
-        clearfixClass: _this.options.clearfixClass,
-        tabsListClass: _this.options.tabsListClass
-      }));
+      _this.$el[positions[_this.options.tabsPosition]](tabs.toHtml());
     }
 
     var $content = _this.$el.find('.' + _this.options.tabBodyClass),
@@ -130,8 +138,9 @@
           .find('>li .' + _this.options.activeClass)
           .removeClass(_this.options.activeClass);
 
-        $tab.blur();
+        $(this).blur();
         _this.$el.find('.' + _this.options.tabBodyClass + ':visible').hide();
+        $(this).parent().addClass(_this.options.activeClass);
         $tabBody.eq(i)[_this.options.fx](_this.options.fxSpeed);
       });
     });
@@ -143,23 +152,24 @@
     this.label = options.label,
     this.id = options.id;
     this.tabList = options.tabList;
+    this.cssClass = options.cssClass;
   };
 
   Tab.prototype.toHtml = function () {
-    var html = '<li><a href="#' + this.id + '">' + this.label + '</a>';
+    var html = '<li class="' + this.cssClass + '"><a href="#' + this.id + '">' + this.label + '</a>';
+
 
     if (this.tabList) {
-      html += this.tabList.toHtml({
-        clearfixClass: '',
-        tabsListClass: 'tabDropdownList'
-      });
+      html += this.tabList.toHtml();
     }
 
     html += '</li>';
     return html;
   };
 
-  function TabList() {
+  function TabList(options) {
+    this.clearfixClass = options.clearfixClass;
+    this.tabsListClass = options.tabsListClass;
     this.tabs = [];
   };
 
@@ -167,10 +177,7 @@
     this.tabs.push(tab);
   };
 
-  TabList.prototype.toHtml = function (options) {
-    this.clearfixClass = options.clearfixClass;
-    this.tabsListClass = options.tabsListClass;
-
+  TabList.prototype.toHtml = function () {
     var len = this.tabs.length,
         i = 0,
         html = '<ul class="' + this.clearfixClass + ' ' + this.tabsListClass + '">';
