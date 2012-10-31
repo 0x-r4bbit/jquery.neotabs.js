@@ -137,11 +137,10 @@
         _this.$el.trigger('showTab.accessibleTabs', [$tab]);
 
         $tabsList
-          .find('>li .' + _this.options.activeClass)
+          .find('>li.' + _this.options.activeClass)
           .removeClass(_this.options.activeClass);
 
         $(this).parent().addClass(_this.options.activeClass);
-
         if (!$(this).parent().hasClass(_this.options.dropdownTabClass)) {
           _this.$el.find('.' + _this.options.tabBodyClass + ':visible').hide();
 
