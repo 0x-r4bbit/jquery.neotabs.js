@@ -27,7 +27,9 @@ The current version **does not** support all of Accesssible-Tabs features. This 
 
 ## Okay got it, where can I start?
 
-Easy-peasy! Just checkout the [documentation](http://github.com/PascalPrecht/jquery.neotabs.js#documentation) or jump directly to the [Installation section](http://github.com/PascalPrecht/jquery.neotabs.js#installation).
+Easy-peasy! Just checkout the [documentation](http://github.com/PascalPrecht/jquery.neotabs.js#documentation) or jump directly to the [Installation section](http://github.com/PascalPrecht/jquery.neotabs.js#installation) and run the [tests](http://github.com/PascalPrecht/jquery.neotabs.js#tests).
+
+If you first want to see some examples, check [**them**](http://github.com/PascalPrecht/jquery.neotabs.js#examples) out!
 
 #### One last thing: Why "NeoTabs"?**
 
@@ -210,6 +212,35 @@ $('.tabs').neoTabs({
   dropdownTabsClearfixClass: 'group' // Clearfix for dropdown
 });
 ````
+
+### Examples
+
+Here are a few examples. Play with'em!
+
+* [Basic NeoTabs](http://github.com/PascalPrecht/jquery.neotabs.js/blob/master/examples/basic-neotabs.html)
+* [NeoTabs with dropdown](http://github.com/PascalPrecht/jquery.neotabs.js/blob/master/examples/dropdown-neotabs.html)
+
+### Tests
+
+This is the first time I want to try out [Vojta's](http://github.com/vojtajina) beautiful testrunner [Testacular.js](http://github.com/vojtajina/testacular). When downloading or cloning this project you can find a 'tests' folder should include all the tests.
+
+**Attention:** There are currently no tests, I'll write'em as soon as possible. Also, if you want to add unit tests, feel free to fork and send me a pull request!
+
+To run the tests, you have to install **Testacular**. It sits on top of Node.js and Socket.io. If you're familiar with [npm](http://npm.org), this should be no problem for you. Otherwise please checkout the installations instructions of Testacular to get it installed correctly.
+
+After installing Testacular you can simple navigate to the project's tests folder via CLI:
+
+````
+$ cd path/to/jquery.neotabs.js/tests
+````
+
+And run:
+
+````
+$ testacular start
+````
+
+This should run all the test in the command line and opens up a browser. If there are any failing tests, feel free to fix them.
 
 ## License
 
