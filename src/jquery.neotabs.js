@@ -1,8 +1,8 @@
 /**
  * NeoTabs - jQuery plugin
  *
- * source: http://github.com/PascalPrecht/jQuery-NeoTabs/
- * site: http://pascalprecht.github.com/jQuery-NeoTabs/
+ * source: http://github.com/PascalPrecht/jquery.neotabs.js/
+ * site: http://pascalprecht.github.com/jquery.neotabs.js/
  *
  * @author: Pascal Precht <pascal.precht@gmail.com>
  * Released under the MIT and GPL Licenses.
