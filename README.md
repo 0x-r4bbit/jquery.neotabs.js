@@ -1,16 +1,16 @@
 # jQuery NeoTabs
 
-A flexible jQuery plugin for generating accessible tabs **AND**  tabs as dropdown inspired by 
+A flexible jQuery plugin for generating accessible tabs **AND**  tabs as dropdown inspired by
 [Dirk Ginader's Accessible-Tabs](http://github.com/ginader/Accessible-Tabs)
 
 ## What? Another jQuery Plugin for Accessible Tabs?
 
-Yes. But it's not just another jQuery Plugin for accessible tabs. This plugin solves a problem, which isn't solved by any plugin I found in the interwebs (This is the moment you should ping me, if you know a plugin which **does** solve the problem, which is explained below). 
+Yes. But it's not just another jQuery Plugin for accessible tabs. This plugin solves a problem, which isn't solved by any plugin I found in the interwebs (This is the moment you should ping me, if you know a plugin which **does** solve the problem, which is explained below).
 
 ## Why NeoTabs?
 So why did I spend the time to revamp Dirk's code from his Accessible Tabs Plugin? The reason is, I used his plugin in a project and it really does a great job! But there's one thing it doesn't cover. The Accessible-Tabs Plugin can not generate tabs, which are also able to behave like a dropdown, so that one can collapse a few tabs if there are too many of 'em.
 
-The first thought was to take Accessible-Tabs and extend it for my needs and maybe sending a pull request on GitHub. Unfortunately it turned out, that the code isn't extendable at all. There's no way to get an instance of Accessible-Tabs or teaching the prototype new things. In addition to that, I found that the code is a bit outdated. 
+The first thought was to take Accessible-Tabs and extend it for my needs and maybe sending a pull request on GitHub. Unfortunately it turned out, that the code isn't extendable at all. There's no way to get an instance of Accessible-Tabs or teaching the prototype new things. In addition to that, I found that the code is a bit outdated.
 
 ## The Goal
 
@@ -23,13 +23,13 @@ The current version **does not** support all of Accesssible-Tabs features. This 
 - Info texts (known as 'currentInfoText')
 - SaveState (Using Cookies)
 - Pagination
-- Keyboard support  
- 
+- Keyboard support
+
 ## Okay got it, where can I start?
 
-Easy-peasy! Just checkout the [documentation](http://github.com/PascalPrecht/jquery.neotabs.js#documentation) or jump directly to the [Installation section](http://github.com/PascalPrecht/jquery.neotabs.js#installation).  
+Easy-peasy! Just checkout the [documentation](http://github.com/PascalPrecht/jquery.neotabs.js#documentation) or jump directly to the [Installation section](http://github.com/PascalPrecht/jquery.neotabs.js#installation).
 
-#### One last thing: Why "NeoTabs"?** 
+#### One last thing: Why "NeoTabs"?**
 
 'Cause they're new. yeap.
 
@@ -131,7 +131,57 @@ Easy hah? Now to make this beautiful valid HTML5 Markup behave like a tabbed-con
   </body>
 </html>
 ````
-Boom. That's all. NeoTabs generates a list from your heading elements and make them behave like tabs. But what if my markup differs from the code above? No problem mucho. NeoTabs is pretty flexible when it comes to customization.
+Boom. That's all. NeoTabs generates a list from your heading elements and make them behave like tabs. But what if your markup differs from the code above? No problem mucho. NeoTabs is pretty flexible when it comes to [customization](http://github.com/PascalPrecht/jquery.neotabs.js#options).
+
+### Generating dropdowns
+
+NeoTabs also provides a pretty simple way to let you generate not only just tabs but also tabs which behave like dropdowns, which was the original goal behind NeoTabs. So, how can you tell NeoTabs to generate a dropdown tab from a set of tabs? Take a look at the following markup:
+
+````
+<html lang="en">
+  <head>
+    <meta charset=utf-8>
+    <title>jQuery NeoTabs</title>
+  </head>
+
+  <body>
+
+    <div class=tabs>
+      <div class=tabbody>
+        <h4>Tabbody Heading</h4>
+
+        <p>Lorem Ipsum</p>
+      </div>
+
+      <div class=tabbody>
+        <h4>Tabbody Heading 2</h4>
+
+        <p>Lorem Ipsum wakka wakka</p>
+      </div>
+
+      <div class=tabbody>
+        <h4 data-dropdown>Tabbody Heading 3</h4>
+
+        <p>Lorem Ipsum wakka wakka</p>
+      </div>
+
+      <div class=tabbody>
+        <h4>Tabbody Heading 4</h4>
+
+        <p>Lorem Ipsum wakka wakka</p>
+      </div>
+    </div>
+
+    <script src=path/to/jquery/source></script>
+    <script src=path/to/jquery.neotabs.js></script>
+    <script>
+      $('.tabs').neoTabs();
+    </script>
+  </body>
+</html>
+````
+
+Noticed the data attribute in the third heading element? Allright. Open your browser and take a look at the result. As you can see, NeoTabs automatically generated a dropdown tab from all tabs sitting behind the tab with the data-attribute. So you can easily say: "I want this tabs to be a dropdown and **this** included.". Just set the data attribute to one of your tabs.
 
 ### Options
 
