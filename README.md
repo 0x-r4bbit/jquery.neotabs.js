@@ -162,7 +162,7 @@ NeoTabs also provides a pretty simple way to let you generate not only just tabs
       </div>
 
       <div class=tabbody>
-        <h4 data-dropdown>Tabbody Heading 3</h4>
+        <h4 data-neotabs-dropdown>Tabbody Heading 3</h4>
 
         <p>Lorem Ipsum wakka wakka</p>
       </div>
@@ -184,6 +184,54 @@ NeoTabs also provides a pretty simple way to let you generate not only just tabs
 ````
 
 Noticed the data attribute in the third heading element? Allright. Open your browser and take a look at the result. As you can see, NeoTabs automatically generated a dropdown tab from all tabs sitting behind the tab with the data-attribute. So you can easily say: "I want this tabs to be a dropdown and **this** included.". Just set the data attribute to one of your tabs.
+
+### Pre-Activating tabs
+
+Since version 0.1.1 you have the opportunity to add a data attribute to pre-activate a tab. All you have to do is to set a data-attribute. Checkout the following code:
+
+````
+<html lang="en">
+  <head>
+    <meta charset=utf-8>
+    <title>jQuery NeoTabs</title>
+  </head>
+
+  <body>
+
+    <div class=tabs>
+      <div class=tabbody>
+        <h4>Tabbody Heading</h4>
+
+        <p>Lorem Ipsum</p>
+      </div>
+
+      <div class=tabbody>
+        <h4 data-neotabs-active>Tabbody Heading 2</h4>
+
+        <p>Lorem Ipsum wakka wakka</p>
+      </div>
+
+      <div class=tabbody>
+        <h4 data-neotabs-dropdown>Tabbody Heading 3</h4>
+
+        <p>Lorem Ipsum wakka wakka</p>
+      </div>
+
+      <div class=tabbody>
+        <h4>Tabbody Heading 4</h4>
+
+        <p>Lorem Ipsum wakka wakka</p>
+      </div>
+    </div>
+
+    <script src=path/to/jquery/source></script>
+    <script src=path/to/jquery.neotabs.js></script>
+    <script>
+      $('.tabs').neoTabs();
+    </script>
+  </body>
+</html>
+````
 
 ### Options
 
@@ -219,6 +267,7 @@ Here are a few examples. Play with'em!
 
 * [Basic NeoTabs](http://github.com/PascalPrecht/jquery.neotabs.js/blob/master/examples/basic-neotabs.html)
 * [NeoTabs with dropdown](http://github.com/PascalPrecht/jquery.neotabs.js/blob/master/examples/dropdown-neotabs.html)
+* [NeoTabs with pre-activated tab](http://github.com/PascalPrecht/jquery.neotabs.js/blob/master/examples/pre-active-neotabs.html)
 
 ### Tests
 
