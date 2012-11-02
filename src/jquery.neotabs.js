@@ -50,6 +50,7 @@
     var _this = this,
         dropdownTabs = null,
         hasDropdown = false,
+        preActive = false,
         count = 0;
 
     $.extend(_this, {
@@ -67,7 +68,8 @@
     _this.$el.find(_this.options.tabHeadElement).each(function (i) {
 
       var $tabHeadElement = $(this);
-      if (!hasDropdown && typeof($tabHeadElement.data('dropdown')) != 'undefined') {
+
+      if (!hasDropdown && typeof($tabHeadElement.data('neotabs-dropdown')) != 'undefined') {
         hasDropdown = true;
         dropdownTabs = new TabList({
           clearfixClass: _this.options.dropdownTabsClearfixClass,
@@ -75,12 +77,17 @@
         });
       }
 
+      if (!preActive && typeof($tabHeadElement.data('neotabs-active')) != 'undefined') {
+        $tabHeadElement.addClass(_this.options.activeClass);
+        preActive = true;
+      }
+
       var tab = new Tab({
         label:  $tabHeadElement.html(),
         id: 'accessibletabscontent' + tabCount + '-' + i,
         tabList: null,
-        cssClass: (_this.options.cssClassAvailable) ? 
-          $tabHeadElement.attr('class') + ' ' + _this.options.tabHeadClass :
+        cssClass: (_this.options.cssClassAvailable) ?
+          (($tabHeadElement.attr('class') || '') + ' ' + _this.options.tabHeadClass):
           _this.options.tabHeadClass
       });
 
@@ -121,7 +128,7 @@
     }
 
     $tabsList.find(' > li:first')
-      .addClass(_this.options.activeClass + ' ' + _this.options.firstTabClass)
+      .addClass(_this.options.firstTabClass + ((!preActive) ? ' ' + _this.options.activeClass : ''))
       .closest('ul').find('> li:last').addClass(_this.options.lastTabClass);
 
     if (_this.options.wrapInnerTabs) {
