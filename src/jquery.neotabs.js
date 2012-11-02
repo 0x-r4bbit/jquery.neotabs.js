@@ -166,6 +166,11 @@
         $anchorTab.click();
       }
     }
+
+    if (preActive) {
+      $anchorTab = $('.' + _this.options.tabsListClass + ' .' + _this.options.activeClass + ' a').click();
+    }
+
     tabCount++;
   }
 
