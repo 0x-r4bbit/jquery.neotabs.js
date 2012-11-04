@@ -33,18 +33,14 @@
       };
 
   function NeoTabs(element, options) {
+    var _this = this;
 
+    $.extend(_this, {
+      $element ; element,
+      options: $.extend({}, defaults, options),
+      keyCodes: keyCodes
+    });
   }
-
-  NeoTabs.prototype.extensions = {};
-
-  NeoTabs.prototype.Tab = function () {
-
-  };
-
-  NeoTabs.prototype.TabList = function () {
-
-  };
 
 }(jQuery, window));
 
