@@ -1,3 +1,60 @@
+;(function ($, window, undefined) {
+  
+  var pluginName = 'neoTabs',
+      document = window.document,
+
+      defaults = {
+        wrapperClass: 'content',
+        activeClass: 'active',
+        tabHeadClass: 'tabhead',
+        tabBodyClass: 'tabbody',
+        firstTabClass: 'first',
+        lastTabClass: 'last',
+        clearfixClass: 'group',
+        tabsListClass: 'tabs-list',
+        tabHeadElement: 'h4',
+        tabsPosition: 'top',
+        cssClassAvailable: true,
+        fx: 'show',
+        fxSpeed: 0,
+        autoAnchor: true,
+        wrapInnerTabs: '',
+        dropdownTabLabel: '&#x25BE;',
+        dropdownTabClass: 'dropdown',
+        dropdownTabsListClass: 'tabs-list',
+        dropdownTabsClearfixClass: 'group'
+      },
+
+      keyCodes {
+        37: -1,
+        38: -1,
+        39: +1,
+        40: +1
+      };
+
+  function NeoTabs(element, options) {
+
+  }
+
+  NeoTabs.prototype.extensions = {};
+
+  NeoTabs.prototype.Tab = function () {
+
+  };
+
+  NeoTabs.prototype.TabList = function () {
+
+  };
+
+}(jQuery, window));
+
+
+
+
+
+
+
+
 /**
  * NeoTabs - jQuery plugin
  *
@@ -35,6 +92,12 @@
       },
 
       tabCount = 0,
+      keyCodes = {
+        37: -1,
+        38: -1,
+        39: +1,
+        40: +1
+      },
       positions = {
         top: 'prepend',
         bottom: 'append'
@@ -157,6 +220,14 @@
 
           _this.$el.find('.' + _this.options.tabBodyClass).eq(j)[_this.options.fx](_this.options.fxSpeed);
         }
+      });
+ 
+      $tab.focus(function (e) {
+        $(document).keyup(function (e) {
+          if (keyCodes[e.keyCode]) {
+            console.log(e.keyCode);
+          }
+        });
       });
     });
 
