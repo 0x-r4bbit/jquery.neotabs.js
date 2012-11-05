@@ -23,7 +23,6 @@ The current version **does not** support all of Accesssible-Tabs features. This 
 - Info texts (known as 'currentInfoText')
 - SaveState (Using Cookies)
 - Pagination
-- Keyboard support
 
 ## Okay got it, where can I start?
 
