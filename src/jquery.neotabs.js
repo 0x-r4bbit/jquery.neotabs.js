@@ -25,11 +25,15 @@
         dropdownTabsClearfixClass: 'group'
       },
       tabsCount = 0,
-      keyCodes {
+      keyCodes = {
         37: -1,
         38: -1,
         39: +1,
         40: +1
+      },
+      positions = {
+        top: 'prepend',
+        bottom: 'append'
       };
 
   // Helper function to check exclusively for an HTML5 data-attribute. Thanks to
@@ -67,12 +71,17 @@
             label: $tabHeadElement.html(),
             id: _this.generateTabId('accessibletabscontent', tabsCount, i),
             tabsList: null,
-            cssClass: ''
+            cssClass: (_this.opts.cssClassAvailable) ? 
+              (($tabHeadElement.attr('class') + ' ' || '') + _this.opts.tabHeadClass) :
+              _this.opts.tabHeadClass
           });
 
       if (!_this.hasDropdown && $tabHeadElement.hasDataAttr('neotabs-dropdown')) {
+        _this.dropdownTabsList = new TabsList({
+          clearfixClass: _this.opts.dropdownTabsClearfixClass,
+          tabsListClass: _this.opts.dropdownTabsListClass
+        });
         _this.hasDropdown = true;
-        _this.dropdownTabsList = new TabsList();
       }
 
       if (!_this.hasPreActiveTab && $tabHeadElement.hasDataAttr('neotabs-active')) {
@@ -85,20 +94,70 @@
       } else {
         _this.tabsList.addTab(tab);
       }
+
+      $tabHeadElement.attr({
+        'id': tab.id,
+        'class': _this.opts.tabHeadClass,
+        'tab-index': '-1'
+      });
     });
+
+    if (_this.hasDropdown) {
+      tabsList.addTab(new Tab({
+        label: _this.opts.dropdownTabLabel,
+        id: '',
+        tabsList: dropdownTabsList,
+        cssClass: _this.opts.tabHeadClass + ' ' + _this.opts.dropdownTabClass
+      }));
+    }
+
+    if (!_this.$el.fin('.' + _this.opts.tabsListClass).length) {
+      _this.$el[positions[_this.opts.tabsPosition]](tabsList.toHtml());
+    }
   }
 
   NeoTabs.prototype.generateTabId = function (name, tabsCount, tabCount) {
     return 'accessibletabscontent' + tabsCount + '-' tabCount;
   };
 
-  function TabsList() {
-
+  function TabsList(options) {
+    this.tabs = [];
+    this.clearfixClass = options.clearfixClass;
+    this.tabsListClass = options.tabsListClass;
   }
 
-  function Tab() {
+  TabsList.prototype.addTab = function (tab) {
+    this.tabs.push(tab);
+  };
 
+  TabsList.prototype.toHtml = function () {
+    var len = this.tabs.length,
+        i = 0,
+        html = '<ul class="' + this.clearfixClass + ' ' + this.tabsListClass + '">';
+
+    for (; i < len; i++) {
+      html += this.tabs[i].toHtml();
+    }
+    return html;
+  };
+
+  function Tab(options) {
+    this.label = options.label;
+    this.id = options.id;
+    this.tabsList = options.tabsList;
+    this.cssClass = options.cssClass;
   }
+
+  Tab.prototype.toHtml = function () {
+    var html = '<li class="' + this.cssClass + '"><a href="#' + this.id + '" id="' + this.id + '">' + this.label + '</a>';
+
+    if (this.tabList) {
+      html += this.tabList.toHtml();
+    }
+    html += '</li>';
+    return html;
+  };
+
 }(jQuery, window));
 
 
