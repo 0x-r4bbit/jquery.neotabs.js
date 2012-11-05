@@ -24,7 +24,7 @@
         dropdownTabsListClass: 'tabs-list',
         dropdownTabsClearfixClass: 'group'
       },
-
+      tabCount = 0,
       keyCodes {
         37: -1,
         38: -1,
@@ -32,16 +32,69 @@
         40: +1
       };
 
+  // Helper function to check exclusively for an HTML5 data-attribute. Thanks to
+  // @cburgdorf for typing down this gist for me: (https://gist.github.com/3979912)
+  $.fn.hasDataAttr = function (attr) {
+    var value = this.attr('data-' + attr);
+    return typeof value !== 'undefined' && value !== false;
+  };
+
+  if ($('body').data('accessibleTabsCount') !== undefined) {
+    tabCount = $('body').data('accessibleTabsCount');
+  }
+
+  $('body').data('accessibleTabsCount', tabCount);
+
   function NeoTabs(element, options) {
     var _this = this;
 
     $.extend(_this, {
-      $element ; element,
-      options: $.extend({}, defaults, options),
-      keyCodes: keyCodes
+      $el: element,
+      opts: $.extend({}, defaults, options),
+      keyCodes: keyCodes,
+      hasDropdown: false,
+      hasPreActiveTab: false,
+      tabsList: new TabsList(),
+      dropdownTabsList: null
+    });
+
+    _this.$el.wrapInner('<div class="' + _this.opts.wrapperClass + '"></div>');
+
+    _this.$el.find(_this.options.tabHeadElement).each(function (i) {
+
+      var $tabHeadElement = $(this),
+          tab = new Tab({
+            label: $tabHeadElement.html(),
+            id: 'accessibletabscontent' + tabCount + '-' + i,
+            tabsList: null,
+            cssClass: ''
+          });
+
+      if (!_this.hasDropdown && $tabHeadElement.hasDataAttr('neotabs-dropdown')) {
+        _this.hasDropdown = true;
+        _this.dropdownTabsList = new TabsList();
+      }
+
+      if (!_this.hasPreActiveTab && $tabHeadElement.hasDataAttr('neotabs-active')) {
+        $tabHeadElement.addClass(_this.opts.activeClass);
+        _this.hasPreActiveTab = true;
+      }
+
+      if (_this.hasDropdown) {
+        _this.dropdownTabsList.addTab(tab);
+      } else {
+        _this.tabsList.addTab(tab);
+      }
     });
   }
 
+  function TabsList() {
+
+  }
+
+  function Tab() {
+
+  }
 }(jQuery, window));
 
 
