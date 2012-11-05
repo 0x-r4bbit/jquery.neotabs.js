@@ -68,7 +68,8 @@
       hasDropdown: false,
       hasPreActiveTab: false,
       tabsList: null,
-      dropdownTabsList: null
+      dropdownTabsList: null,
+      currentTabsCount: tabsCount
     });
 
     _this.tabsList = new TabsList({
@@ -152,9 +153,8 @@
     }
 
     $tabsList.find('> li a').each(function (i) {
-      var $tab = $(this);
 
-      $tab.on('click', function (e) {
+      $(this).on('click', function (e) {
         e.preventDefault();
 
         $tabsList
@@ -162,30 +162,40 @@
           .removeClass(_this.opts.activeClass);
 
         $(this).parent().addClass(_this.opts.activeClass);
+        $(this).blur();
+
+        var j = i;
 
         if (!$(this).parent().hasClass(_this.opts.dropdownTabClass)) {
           _this.$el.find('.' + _this.opts.tabBodyClass + ':visible').hide();
-
-          var j = i;
 
           // little hack to because we have more tabHead then tabBodys
           if ($(this).closest('.' + _this.opts.dropdownTabClass).length) {
             j = i-1;
           }
 
+          $(this).focus().keyup(function (e) {
+            if (_this.keyCodes[e.keyCode]) {
+              _this.activateTab(_this.currentTabsCount, (j + _this.keyCodes[e.keyCode]));
+              $(this).unbind('keyup');
+            }
+          });
+
           _this.$el.find('.' + _this.opts.tabBodyClass).eq(j)[_this.opts.fx](_this.opts.fxSpeed);
+        } else {
+          console.log("Dropdown Taaab");
         }
       });
 
-      $tab.focus(function () {
+      $(this).focus(function () {
         $(document).keyup(function (e) {
           if (_this.keyCodes[e.keyCode]) {
-            console.log(e.keyCode);
+            _this.activateTab(_this.currentTabsCount, (i + _this.keyCodes[e.keyCode]));
           }
         });
       });
 
-      $tab.blur(function () {
+      $(this).blur(function () {
         $(document).unbind('keyup');
       });
     });
@@ -206,9 +216,9 @@
   }
 
   NeoTabs.prototype.activateTab = function (tabsCount, tabCount) {
-   $tab = $('#' + this.generateTabId(tabsCount, tabCount));
-   $tab.closest('.' + this.opts.tabsListClass).find('> li. '+_this.opts.activeClass).removeClass(_this.opts.activeClass);
-   $tab.focus().click();
+    console.log('Activating Tab #accessibletabscontent'+tabsCount+'-'+tabCount);
+    $tabs = this.$el.find('.' + this.opts.tabsListClass + '> li a');
+    $tabs.eq(tabCount).click();
   };
 
   NeoTabs.prototype.generateTabId = function (tabsCount, tabCount) {
