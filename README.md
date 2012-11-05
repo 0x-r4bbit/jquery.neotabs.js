@@ -274,9 +274,9 @@ $('.tabs').neoTabs({
 
 Here are a few examples. Play with'em!
 
-* [Basic NeoTabs](http://github.com/PascalPrecht/jquery.neotabs.js/blob/master/examples/basic-neotabs.html)
-* [NeoTabs with dropdown](http://github.com/PascalPrecht/jquery.neotabs.js/blob/master/examples/dropdown-neotabs.html)
-* [NeoTabs with pre-activated tab](http://github.com/PascalPrecht/jquery.neotabs.js/blob/master/examples/pre-active-neotabs.html)
+* [Basic NeoTabs](http://pascalprecht.github.com/jquery.neotabs.js/examples/basic-neotabs.html)
+* [NeoTabs with dropdown](http://pascalprecht.github.com/jquery.neotabs.js/examples/dropdown-neotabs.html)
+* [NeoTabs with pre-activated tab](http://pascalprecht.github.com/jquery.neotabs.js/examples/pre-active-neotabs.html)
 
 ### Tests
 
