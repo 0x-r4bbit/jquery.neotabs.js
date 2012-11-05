@@ -176,14 +176,13 @@
 
           $(this).focus().keyup(function (e) {
             if (_this.keyCodes[e.keyCode]) {
-              _this.activateTab(_this.currentTabsCount, (j + _this.keyCodes[e.keyCode]));
-              $(this).unbind('keyup');
+              if (_this.activateTab(_this.currentTabsCount, (j + _this.keyCodes[e.keyCode]))) {
+                $(this).unbind('keyup');
+              }
             }
           });
 
           _this.$el.find('.' + _this.opts.tabBodyClass).eq(j)[_this.opts.fx](_this.opts.fxSpeed);
-        } else {
-          console.log("Dropdown Taaab");
         }
       });
 
@@ -216,9 +215,12 @@
   }
 
   NeoTabs.prototype.activateTab = function (tabsCount, tabCount) {
-    console.log('Activating Tab #accessibletabscontent'+tabsCount+'-'+tabCount);
-    $tabs = this.$el.find('.' + this.opts.tabsListClass + '> li a');
-    $tabs.eq(tabCount).click();
+    $tab = $('#'+this.generateTabId(tabsCount, tabCount));
+    if ($tab.length) {
+      $tab.click();
+      return true;
+    }
+    return false;
   };
 
   NeoTabs.prototype.generateTabId = function (tabsCount, tabCount) {
