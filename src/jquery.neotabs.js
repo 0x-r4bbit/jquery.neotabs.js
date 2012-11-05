@@ -180,9 +180,13 @@
       $tab.focus(function () {
         $(document).keyup(function (e) {
           if (_this.keyCodes[e.keyCode]) {
-            _this.activateTab(0, (i+_this.keyCodes[e.keyCode]));
+            console.log(e.keyCode);
           }
         });
+      });
+
+      $tab.blur(function () {
+        $(document).unbind('keyup');
       });
     });
 
@@ -203,8 +207,8 @@
 
   NeoTabs.prototype.activateTab = function (tabsCount, tabCount) {
    $tab = $('#' + this.generateTabId(tabsCount, tabCount));
-   console.log($tab);
-   $tab.click();
+   $tab.closest('.' + this.opts.tabsListClass).find('> li. '+_this.opts.activeClass).removeClass(_this.opts.activeClass);
+   $tab.focus().click();
   };
 
   NeoTabs.prototype.generateTabId = function (tabsCount, tabCount) {
