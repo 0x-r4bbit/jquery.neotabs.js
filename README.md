@@ -45,6 +45,16 @@ To get started, just [download](http://github.com/PascalPrecht/jquery.neotabs.js
 git clone http://github.com/PascalPrecht/jquery.neotabs.js.git
 ````
 
+After that you can either use the uncompressed version of NeoTabs, or you build a distribution version by yourself. For the latter you have to install [grunt](http://gruntjs.com) first. Please follow the install instructions from their homepage and comeback.
+
+When grunt is installed, move to the project directory and run:
+
+````
+grunt build
+````
+
+This will build a distribution version of NeoTabs. You can find it in the dist folder.
+
 NeoTabs sits on top of jQuery, so please include jQuery first:
 
 ````
