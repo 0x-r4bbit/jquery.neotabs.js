@@ -291,6 +291,16 @@ $ testacular start
 
 This should run all the test in the command line and opens up a browser. If there are any failing tests, feel free to fix them.
 
+## Todos
+
+* Extension system (for things like jquery.neotabs.syncHeights etc.)
+* Keyboard Support
+* Paginator as an extension
+* SyncHeights as an extension
+* SaveState as an extension
+* Grunt script for distribution task
+* Unit tests
+
 ## License
 
 This software is released under [MIT License](http://www.opensource.org/licenses/mit-license.php)
