@@ -215,7 +215,7 @@
   }
 
   NeoTabs.prototype.activateTab = function (tabsCount, tabCount) {
-    $tab = $('#'+this.generateTabId(tabsCount, tabCount));
+    var $tab = $('#'+this.generateTabId(tabsCount, tabCount));
     if ($tab.length) {
       $tab.click();
       return true;
