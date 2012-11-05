@@ -24,7 +24,7 @@
         dropdownTabsListClass: 'tabs-list',
         dropdownTabsClearfixClass: 'group'
       },
-      tabCount = 0,
+      tabsCount = 0,
       keyCodes {
         37: -1,
         38: -1,
@@ -40,10 +40,10 @@
   };
 
   if ($('body').data('accessibleTabsCount') !== undefined) {
-    tabCount = $('body').data('accessibleTabsCount');
+    tabsCount = $('body').data('accessibleTabsCount');
   }
 
-  $('body').data('accessibleTabsCount', tabCount);
+  $('body').data('accessibleTabsCount', tabsCount);
 
   function NeoTabs(element, options) {
     var _this = this;
@@ -65,7 +65,7 @@
       var $tabHeadElement = $(this),
           tab = new Tab({
             label: $tabHeadElement.html(),
-            id: 'accessibletabscontent' + tabCount + '-' + i,
+            id: _this.generateTabId('accessibletabscontent', tabsCount, i),
             tabsList: null,
             cssClass: ''
           });
@@ -87,6 +87,10 @@
       }
     });
   }
+
+  NeoTabs.prototype.generateTabId = function (name, tabsCount, tabCount) {
+    return 'accessibletabscontent' + tabsCount + '-' tabCount;
+  };
 
   function TabsList() {
 
