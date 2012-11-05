@@ -97,7 +97,7 @@
 
       var tab = new Tab({
         label: $tabHeadElement.html(),
-        id: _this.generateTabId('accessibletabscontent', tabsCount, i),
+        id: _this.generateTabId(tabsCount, i),
         tabsList: null,
         cssClass: (_this.opts.cssClassAvailable) ?
           (($tabHeadElement.attr('class') || '') + ' ' + _this.opts.tabHeadClass) :
@@ -146,6 +146,7 @@
       .closest('ul').find('> li:last')
       .addClass(_this.opts.lastTabClass);
 
+
     if (_this.opts.wrapInnerTabs) {
       $tabsList.find('> li > a').wrapInner(_this.opts.wrapInnerTabs);
     }
@@ -175,6 +176,14 @@
           _this.$el.find('.' + _this.opts.tabBodyClass).eq(j)[_this.opts.fx](_this.opts.fxSpeed);
         }
       });
+
+      $tab.focus(function () {
+        $(document).keyup(function (e) {
+          if (_this.keyCodes[e.keyCode]) {
+            _this.activateTab(0, (i+_this.keyCodes[e.keyCode]));
+          }
+        });
+      });
     });
 
     // If we have an anchor in our url, trigger click event on the right tab
@@ -188,10 +197,17 @@
     if (_this.hasPreActiveTab) {
       $('.' + _this.opts.tabsListClass + ' .' + _this.opts.activeClass + ' a').click();
     }
+
     tabsCount++;
   }
 
-  NeoTabs.prototype.generateTabId = function (name, tabsCount, tabCount) {
+  NeoTabs.prototype.activateTab = function (tabsCount, tabCount) {
+   $tab = $('#' + this.generateTabId(tabsCount, tabCount));
+   console.log($tab);
+   $tab.click();
+  };
+
+  NeoTabs.prototype.generateTabId = function (tabsCount, tabCount) {
     return 'accessibletabscontent' + tabsCount + '-' + tabCount;
   };
 
