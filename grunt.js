@@ -23,7 +23,7 @@ module.exports = function(grunt) {
       }
     },
     lint: {
-      files: ['grunt.js', 'src/**/*.js', 'test/**/*.js']
+      files: ['src/**/*.js', 'test/**/*.js']
     },
     watch: {
       files: '<config:lint.files>',
@@ -51,6 +51,6 @@ module.exports = function(grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', 'lint concat min');
+  grunt.registerTask('build', 'lint concat min');
 
 };

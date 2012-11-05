@@ -69,7 +69,7 @@
 
       var $tabHeadElement = $(this);
 
-      if (!hasDropdown && typeof($tabHeadElement.data('neotabs-dropdown')) != 'undefined') {
+      if (!hasDropdown && typeof($tabHeadElement.data('neotabs-dropdown')) !== 'undefined') {
         hasDropdown = true;
         dropdownTabs = new TabList({
           clearfixClass: _this.options.dropdownTabsClearfixClass,
@@ -77,7 +77,7 @@
         });
       }
 
-      if (!preActive && typeof($tabHeadElement.data('neotabs-active')) != 'undefined') {
+      if (!preActive && typeof($tabHeadElement.data('neotabs-active')) !== 'undefined') {
         $tabHeadElement.addClass(_this.options.activeClass);
         preActive = true;
       }
@@ -136,7 +136,7 @@
     }
 
     $tabsList.find('> li a').each(function (i) {
-      $tab = $(this);
+      var $tab = $(this);
 
       $tab.on('click', function (e) {
         e.preventDefault();
@@ -161,25 +161,25 @@
     });
 
     if (_this.options.autoAnchor && window.location.hash) {
-      $anchorTab = $('.' + _this.options.tabsListClass).find(window.location.hash);
+      var $anchorTab = $('.' + _this.options.tabsListClass).find(window.location.hash);
       if ($anchorTab.size()) {
         $anchorTab.click();
       }
     }
 
     if (preActive) {
-      $anchorTab = $('.' + _this.options.tabsListClass + ' .' + _this.options.activeClass + ' a').click();
+      $('.' + _this.options.tabsListClass + ' .' + _this.options.activeClass + ' a').click();
     }
 
     tabCount++;
   }
 
   function Tab(options) {
-    this.label = options.label,
+    this.label = options.label;
     this.id = options.id;
     this.tabList = options.tabList;
     this.cssClass = options.cssClass;
-  };
+  }
 
   Tab.prototype.toHtml = function () {
     var html = '<li class="' + this.cssClass + '"><a href="#' + this.id + '" id="' + this.id + '">' + this.label + '</a>';
@@ -197,7 +197,7 @@
     this.clearfixClass = options.clearfixClass;
     this.tabsListClass = options.tabsListClass;
     this.tabs = [];
-  };
+  }
 
   TabList.prototype.addTab = function (tab) {
     this.tabs.push(tab);
@@ -221,5 +221,5 @@
         $.data(this, 'plugin_' + pluginName, new NeoTabs($(this), options ));
       }
     });
-  }
+  };
 }(jQuery, window));
