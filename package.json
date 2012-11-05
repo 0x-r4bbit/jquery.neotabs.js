@@ -1,0 +1,19 @@
+{
+  "name": "jquery.neotabs",
+  "title": "jQuery NeoTabs",
+  "description": "A flexible jQuery plugin for generating acessible tabs and tabs as dropdown inspired by Dirk Ginader's Accessible-Tabs",
+  "version": "0.1.4",
+  "homepage": "https://github.com/PascalPrecht/jquery.neotabs.js",
+  "author": {
+    "name": "Pascal Precht",
+    "email": "pascal.precht@gmail.com",
+    "url": "www.pascalprecht.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:PascalPrecht/jquery.neotabs.js.git"
+  },
+  "dependencies": {
+    "jquery": "~1.8"
+  }
+}
