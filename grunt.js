@@ -46,11 +46,13 @@ module.exports = function(grunt) {
       globals: {
         jQuery: true,
         $: true,
+        NeoTabs: true,
+        console: true,
         it: true,
         expect: true,
         describe: true,
-        NeoTabs: true,
-        console: true
+        beforeEach: true,
+        afterEach: true
       }
     },
     uglify: {}

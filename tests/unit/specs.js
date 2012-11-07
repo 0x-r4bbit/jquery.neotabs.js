@@ -23,6 +23,33 @@
       '</div>' +
     '</div>';
 
+    var options = {
+      wrapperClass: 'content',
+      activeClass: 'active',
+      tabHeadClass: 'tabhead',
+      tabBodyClass: 'tabbody',
+      firstTabClass: 'first',
+      lastTabClass: 'last',
+      clearfixClass: 'group',
+      tabsListClass: 'tabs-list',
+      tabHeadElement: 'h4',
+      tabsPosition: 'top',
+      cssClassAvailable: true,
+      fx: 'show',
+      fxSpeed: 0,
+      autoAnchor: true,
+      wrapInnerTabs: '',
+      dropdownTabLabel: '&#x25BE;',
+      dropdownTabClass: 'dropdown',
+      dropdownTabsListClass: 'tabs-list',
+      dropdownTabsClearfixClass: 'group'
+    };
+
+
+    beforeEach(function () {
+      options = options;
+    });
+
     describe('Setup', function () {
 
       it('tests if jQuery is loaded', function () {
@@ -42,7 +69,7 @@
 
     describe('Public API', function () {
       var $el = $(fixture),
-          $neoTabs = new NeoTabs($el);
+          $neoTabs = new NeoTabs($el, options);
 
       it('should have a method to activate tabs', function () {
         var methodExists = (typeof($neoTabs.activateTab) === 'function');
@@ -57,24 +84,46 @@
 
     describe('Initialization', function () {
       var $el = $(fixture),
-          $neoTabs = new NeoTabs($el);
+          $neoTabs = new NeoTabs($el, options);
 
       it('should assign an element', function () {
         expect($neoTabs.$el).toBe($el);
       });
 
-      it('should inject a tabs list', function () {
-        expect($neoTabs.$el).toContain('.tabs-list');
-        expect($neoTabs.$el.find('.tabs-list')).toBe('ul');
-        expect($neoTabs.$el.find('.tabs-list')).not.toBe('ol');
+      it('should inject a content wrapper', function () {
+        expect($neoTabs.$el).toContain('.' + options.wrapperClass);
       });
 
-      it('should prepend tabs list in tabs by default', function () {
-        expect($neoTabs.$el.children(0).hasClass('tabs-list')).toBe(true);
+      it('should inject a tabs list', function () {
+        expect($neoTabs.$el).toContain('.' + options.tabsListClass);
+        expect($neoTabs.$el.find('.' + options.tabsListClass)).toBe('ul');
+        expect($neoTabs.$el.find('.' + options.tabsListClass)).not.toBe('ol');
+      });
+
+      it('should give the tabs list a cleafix class', function () {
+        expect($neoTabs.$el.find('.' + options.tabsListClass).hasClass(options.clearfixClass)).toBe(true);
       });
 
       it('should set the first tab active', function () {
-        expect($neoTabs.$el.find('.tabs-list').children(0).hasClass('active')).toBe(true);
+        expect($neoTabs.$el.find('.' + options.tabsListClass).children(0).hasClass(options.activeClass)).toBe(true);
+      });
+
+      it('should give the first tab the firstTabClass', function () {
+        expect($neoTabs.$el.find('.' + options.tabsListClass).children(0).hasClass(options.firstTabClass)).toBe(true);
+      });
+
+      it('should give each tab a tabhead class', function () {
+        $neoTabs.$el.find('.' + options.tabsListClass).children().each(function (i, tab) {
+          expect($(tab).hasClass(options.tabHeadClass)).toBe(true);
+        });
+      });
+
+      it('should give the last tab the lastTabClass', function () {
+        expect($neoTabs.$el.find('.' + options.tabsListClass).children(':last').hasClass(options.lastTabClass)).toBe(true);
+      });
+
+      it('should prepend tabs list in tabs by default', function () {
+        expect($neoTabs.$el.children(0)).toBe('ul');
       });
     });
   });

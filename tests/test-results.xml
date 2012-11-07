@@ -1,11 +1,20 @@
 <?xml version="1.0"?>
 <testsuites>
-  <testsuite name="Chrome 25.0" package="" timestamp="2012-11-01T08:25:42" id="0" hostname="Pascals-MacBook-Air.local" tests="2" errors="0" failures="0" time="0">
+  <testsuite name="Chrome 25.0" package="" timestamp="2012-11-07T16:00:18" id="0" hostname="Pascals-MacBook-Air.local" tests="11" errors="0" failures="0" time="0.016">
     <properties>
-      <property name="browser.fullName" value="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/25.0.1313.0 Safari/537.17"/>
+      <property name="browser.fullName" value="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.18 (KHTML, like Gecko) Chrome/25.0.1319.0 Safari/537.18"/>
     </properties>
-    <testcase name="should append a value" time="0" classname="Chrome 25.0.Array _push()"/>
-    <testcase name="should return the length" time="0" classname="Chrome 25.0.Array _push()"/>
+    <testcase name="tests if jQuery is loaded" time="0.011" classname="Chrome 25.0.jQuery NeoTabs TestSuite Setup"/>
+    <testcase name="tests if NeoTabs is a jQuery plugin" time="0" classname="Chrome 25.0.jQuery NeoTabs TestSuite Setup"/>
+    <testcase name="tests if NeoTabs constructor is avaible in global scope" time="0.001" classname="Chrome 25.0.jQuery NeoTabs TestSuite Setup"/>
+    <testcase name="should have a method to activate tabs" time="0" classname="Chrome 25.0.jQuery NeoTabs TestSuite Public API"/>
+    <testcase name="should have a method to open a dropdown" time="0" classname="Chrome 25.0.jQuery NeoTabs TestSuite Public API"/>
+    <testcase name="should assign an element" time="0.001" classname="Chrome 25.0.jQuery NeoTabs TestSuite Initialization"/>
+    <testcase name="should inject a content wrapper" time="0" classname="Chrome 25.0.jQuery NeoTabs TestSuite Initialization"/>
+    <testcase name="should inject a tabs list" time="0.001" classname="Chrome 25.0.jQuery NeoTabs TestSuite Initialization"/>
+    <testcase name="should give each tab a tabhead class" time="0.001" classname="Chrome 25.0.jQuery NeoTabs TestSuite Initialization"/>
+    <testcase name="should prepend tabs list in tabs by default" time="0" classname="Chrome 25.0.jQuery NeoTabs TestSuite Initialization"/>
+    <testcase name="should set the first tab active" time="0.001" classname="Chrome 25.0.jQuery NeoTabs TestSuite Initialization"/>
     <system-out/>
     <system-err/>
   </testsuite>
