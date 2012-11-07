@@ -9,6 +9,7 @@ Here are a few examples. Play with'em!
 * [NeoTabs with dropdown](http://pascalprecht.github.com/jquery.neotabs.js/examples/dropdown-neotabs.html)
 * [NeoTabs with pre-activated tab](http://pascalprecht.github.com/jquery.neotabs.js/examples/pre-active-neotabs.html)
 
+
 ## What? Another jQuery Plugin for Accessible Tabs?
 
 Yes. But it's not just another jQuery Plugin for accessible tabs. This plugin solves a problem, which isn't solved by any plugin I found in the interwebs (This is the moment you should ping me, if you know a plugin which **does** solve the problem, which is explained below).
@@ -326,8 +327,33 @@ This should run all the test in the command line and opens up a browser. If ther
 * Paginator as an extension
 * SyncHeights as an extension
 * SaveState as an extension
-* Grunt script for distribution task
 * Unit tests
+
+## Milestone
+
+This is a first draft specification of the milestone for version 1.0.0
+
+### Public API
+
+It should be possible to interact with an existing public API (there's already an [issue](http://github.com/PascalPrecht/jquery.neotabs.js/issues/11) for that). How does that look like? This is how you normally use NeoTabs with jQuery:
+
+````
+$('.tabs').neoTabs({
+  // ... optional options go here
+});
+````
+This is great as long as you just want NeoTabs to rock over the markup and make your content behave like a tabs module. Anyway. It'd also be cool if you can instantiate a NeoTabs instance manually and influence it's behavior.
+
+#### Getting an instance of NeoTabs
+
+Getting an instance of a NeoTabs object is nothing special:
+
+````
+$neoTabs = new NeoTabs($('#tabs-module'), {
+  // optional options go here
+});
+````
+
 
 ## License
 
