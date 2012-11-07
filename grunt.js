@@ -49,7 +49,8 @@ module.exports = function(grunt) {
         it: true,
         expect: true,
         describe: true,
-        NeoTabs: true
+        NeoTabs: true,
+        console: true
       }
     },
     uglify: {}

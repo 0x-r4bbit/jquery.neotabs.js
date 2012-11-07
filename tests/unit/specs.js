@@ -26,8 +26,8 @@
     describe('Setup', function () {
 
       it('tests if jQuery is loaded', function () {
-        expect(!!window.$).toBe(true);
-        expect(typeof(window.$)).toBe('function');
+        expect(!!$).toBe(true);
+        expect(typeof($)).toBe('function');
       });
 
       it('tests if NeoTabs is a jQuery plugin', function () {
@@ -35,25 +35,8 @@
       });
 
       it('tests if NeoTabs constructor is avaible in global scope', function () {
-        expect(!!window.NeoTabs).toBe(true);
-        expect(typeof(window.NeoTabs)).toBe('function');
-      });
-    });
-
-    describe('Initialization', function () {
-      var $el = $(fixture),
-          $neoTabs = new NeoTabs($el);
-
-      it('should assign an element', function () {
-        expect($neoTabs.$el).toBe($el);
-      });
-
-      it('should inject a tabs list', function () {
-        expect($neoTabs.$el).toContain('.tabs-list');
-      });
-
-      it('should prepend the tabs list by default', function () {
-        expect($neoTabs.$el.children(0)).toBe('ul.tabs-list');
+        expect(!!NeoTabs).toBe(true);
+        expect(typeof(NeoTabs)).toBe('function');
       });
     });
 
@@ -69,6 +52,29 @@
       it('should have a method to open a dropdown', function () {
         var methodExists = (typeof($neoTabs.openDropdown) === 'function');
         expect(methodExists).toBe(true);
+      });
+    });
+
+    describe('Initialization', function () {
+      var $el = $(fixture),
+          $neoTabs = new NeoTabs($el);
+
+      it('should assign an element', function () {
+        expect($neoTabs.$el).toBe($el);
+      });
+
+      it('should inject a tabs list', function () {
+        expect($neoTabs.$el).toContain('.tabs-list');
+        expect($neoTabs.$el.find('.tabs-list')).toBe('ul');
+        expect($neoTabs.$el.find('.tabs-list')).not.toBe('ol');
+      });
+
+      it('should prepend tabs list in tabs by default', function () {
+        expect($neoTabs.$el.children(0).hasClass('tabs-list')).toBe(true);
+      });
+
+      it('should set the first tab active', function () {
+        expect($neoTabs.$el.find('.tabs-list').children(0).hasClass('active')).toBe(true);
       });
     });
   });
