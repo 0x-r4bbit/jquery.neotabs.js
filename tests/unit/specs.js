@@ -1,11 +1,27 @@
 'use strict';
-/* jasmine specs for controllers go here */
 
 describe('jQuery NeoTabs TestSuite', function () {
 
-  var $fixture;
+  var fixture = '<div class="tabs">' +
+    '<div class="tabbody">' +
+      '<h4>Tabbody Heading</h4>' +
+      '<p>Lorem Ipsum</p>' +
+    '</div>' +
+    '<div class="tabbody">' +
+      '<h4>Tabbody Heading 2</h4>' +
+      '<p>Lorem Ipsum</p>' +
+    '</div>' +
+    '<div class="tabbody">' +
+      '<h4>Tabbody Heading 3</h4>' +
+      '<p>Lorem Ipsum</p>' +
+    '</div>' +
+    '<div class="tabbody">' +
+      '<h4>Tabbody Heading 4</h4>' +
+      '<p>Lorem Ipsum</p>' +
+    '</div>' +
+  '</div>';
 
-  describe('Dependency TestSuite', function () {
+  describe('Setup', function () {
 
     it('tests if jQuery is loaded', function () {
       expect(!!window.$).toBe(true);
@@ -22,40 +38,27 @@ describe('jQuery NeoTabs TestSuite', function () {
     });
   });
 
+  describe('Initialization', function () {
+    var $el = $(fixture),
+        $neoTabs = new NeoTabs($el);
 
-  describe('DOM Manipulation TestSuite', function () {
+    it('should assign an element', function () {
+      expect($neotabs.$el).toBe($el);
+    });
+  });
 
-    beforeEach(function () {
-      $fixture = $(
-        '<div class="tabs">' +
-          '<div class="tabbody">' +
-            '<h4>Tabbody Heading</h4>' +
-            '<p>Lorem Ipsum</p>' +
-          '</div>' +
-          '<div class="tabbody">' +
-            '<h4>Tabbody Heading 2</h4>' +
-            '<p>Lorem Ipsum</p>' +
-          '</div>' +
-          '<div class="tabbody">' +
-            '<h4>Tabbody Heading 3</h4>' +
-            '<p>Lorem Ipsum</p>' +
-          '</div>' +
-          '<div class="tabbody">' +
-            '<h4>Tabbody Heading 4</h4>' +
-            '<p>Lorem Ipsum</p>' +
-          '</div>' +
-        '</div>');
+  describe('Public API', function () {
+    var $el = $(fixture),
+        $neoTabs = new NeoTabs($el);
+
+    it('should have a method to activate tabs', function () {
+      var methodExists = (typeof($neoTabs.activateTab) === 'function')
+      expect(methodExists).toBe(true);
     });
 
-
-    describe('NeoTabs instance', function () {
-
-      var $instance = new NeoTabs($fixture);
-
-      it('tests if constructor returns a NeoTabs instance', function () {
-        expect(typeof($instance)).toBe('object');
-        expect($instance.constructor).toBe(NeoTabs);
-      });
+    it('should have a method to open a dropdown', function () {
+      var methodExists = (typeof($neoTabs.openDropdown) == 'function');
+      expected(methodExists).toBe(true);
     });
   });
 });
