@@ -353,6 +353,34 @@ $neoTabs = new NeoTabs($('#tabs-module'), {
   // optional options go here
 });
 ````
+This snippets does two things.
+
+* It calls the NeoTabs constructor and tranforms your foundation markup to a tabs module
+* It returns an instance of NeoTabs. This is **YOUR** gate to the public API
+
+
+#### Activating tabs
+
+Once you have an instance, you should be able to activate a specific tab:
+
+````
+$neoTabs.activateTab(0);
+````
+
+Would active the first tab in the current NeoTabs instance, since NeoTabs starts counting from 0.
+
+#### Opening the dropdown
+
+Being able to activate a tab is nearly the same as opening a dropdown because a dropdown is nothing more then just a tab. So opening a dropdown tab should either be possible with:
+
+````
+$neoTabs.openDropdown();
+````
+or through:
+````
+$neoTabs.activateTab(index); // where index is the index of the dropdown tab
+````
+since it's equivalent.
 
 
 ## License
