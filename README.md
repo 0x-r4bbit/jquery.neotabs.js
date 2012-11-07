@@ -3,6 +3,12 @@
 A flexible jQuery plugin for generating accessible tabs **AND**  tabs as dropdown inspired by
 [Dirk Ginader's Accessible-Tabs](http://github.com/ginader/Accessible-Tabs)
 
+Here are a few examples. Play with'em!
+
+* [Basic NeoTabs](http://pascalprecht.github.com/jquery.neotabs.js/examples/basic-neotabs.html)
+* [NeoTabs with dropdown](http://pascalprecht.github.com/jquery.neotabs.js/examples/dropdown-neotabs.html)
+* [NeoTabs with pre-activated tab](http://pascalprecht.github.com/jquery.neotabs.js/examples/pre-active-neotabs.html)
+
 ## What? Another jQuery Plugin for Accessible Tabs?
 
 Yes. But it's not just another jQuery Plugin for accessible tabs. This plugin solves a problem, which isn't solved by any plugin I found in the interwebs (This is the moment you should ping me, if you know a plugin which **does** solve the problem, which is explained below).
