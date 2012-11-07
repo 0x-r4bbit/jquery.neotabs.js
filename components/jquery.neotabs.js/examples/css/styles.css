@@ -1,0 +1,71 @@
+body {
+  font-family: "Arial";
+}
+
+.tabs {
+  width: 675px;
+}
+.tabs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tabs-list li {
+  display: inline-block;
+  margin-left: 3px;
+}
+
+.tabs-list li:first-child {
+  margin-left: 0;
+}
+.tabs-list .active a {
+  color: #FFF;
+  background-color: #333;
+}
+
+.tabs-list a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  background: #CCC;
+  padding: 5px 10px;
+  display: block;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown.active .tabs-list {
+  display: block;
+}
+
+.dropdown .tabs-list {
+  display: none;
+  position: absolute;
+  width: 200px;
+  right: 0;
+  background: #333;
+  border: 1px solid #ccc;
+}
+
+.dropdown .tabs-list li {
+  display: block;
+}
+
+.dropdown .tabs-list a {
+  background: transparent;
+  color: #fff;
+}
+
+.dropdown .tabs-list a:hover {
+  background: #fff;
+  color: #333;
+}
+
+.tabbody {
+  background: #F0F0F0;
+  padding: 12px;
+  margin-top: 12px;
+}

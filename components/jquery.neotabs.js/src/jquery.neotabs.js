@@ -157,11 +157,18 @@
       $(this).on('click', function (e) {
         e.preventDefault();
 
-        $tabsList
-          .find('> li.' + _this.opts.activeClass)
-          .removeClass(_this.opts.activeClass);
+        if (!$(this).parent().hasClass(_this.opts.activeClass)) {
+          $tabsList
+            .find('> li.' + _this.opts.activeClass)
+            .removeClass(_this.opts.activeClass);
 
-        $(this).parent().addClass(_this.opts.activeClass);
+          $(this).parent().addClass(_this.opts.activeClass);
+        } else {
+          if ($(this).parent().hasClass(_this.opts.dropdownTabClass)) {
+            $(this).parent().removeClass(_this.opts.activeClass);
+          }
+        }
+
         $(this).blur();
 
         var j = i;
