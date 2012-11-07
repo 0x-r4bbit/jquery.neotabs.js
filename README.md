@@ -44,6 +44,8 @@ If you first want to see some examples, check [**them**](http://github.com/Pasca
 
 ### Installation
 
+
+#### Via Git
 To get started, just [download](http://github.com/PascalPrecht/jquery.neotabs.js/downloads) the code from GitHub or open your beautiful CLI to do some cloning with:
 
 ````
@@ -59,6 +61,19 @@ grunt build
 ````
 
 This will build a distribution version of NeoTabs. You can find it in the dist folder.
+
+#### Via Bower
+
+Since version 0.1.6 you're also able to install NeoTabs via Twitter's package manager [Bower](http://twitter.github.com/bower). Install it, move to your project directory and simpley call:
+
+````
+bowser install jquery.neotabs.js
+````
+
+Et voila, there's you NeoTabs plugin!
+
+
+### Usage
 
 NeoTabs sits on top of jQuery, so please include jQuery first:
 
@@ -77,8 +92,6 @@ NeoTabs sits on top of jQuery, so please include jQuery first:
   </body>
 </html>
 ````
-
-### Usage
 
 NeoTabs is built to make progressively enhanced tabbed-content. Progressively enhanced means, you start by writing well-formed and semantic markup. So, this is how it should look like:
 
