@@ -230,10 +230,6 @@
     return false;
   };
 
-  NeoTabs.prototype.openDropdown = function () {
-
-  };
-
   NeoTabs.prototype.generateTabId = function (tabsCount, tabCount) {
     return 'accessibletabscontent' + tabsCount + '-' + tabCount;
   };
