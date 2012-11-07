@@ -6,7 +6,7 @@
 
     var fixture = '<div class="tabs">' +
       '<div class="tabbody">' +
-        '<h4>Tabbody Heading</h4>' +
+        '<h4 class="foo">Tabbody Heading</h4>' +
         '<p>Lorem Ipsum</p>' +
       '</div>' +
       '<div class="tabbody">' +
@@ -124,6 +124,11 @@
 
       it('should prepend tabs list in tabs by default', function () {
         expect($neoTabs.$el.children(0)).toBe('ul');
+      });
+
+      it('should apply pre-existing class of tabhead by default', function () {
+        expect($neoTabs.$el).toContain('.foo');
+        expect($neoTabs.$el.find('.foo')).toBe('li');
       });
     });
   });
