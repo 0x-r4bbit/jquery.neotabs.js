@@ -67,7 +67,7 @@
       });
     });
 
-    /*describe('Public API', function () {
+    describe('Public API', function () {
       var $el = $(fixture),
           $neoTabs = new NeoTabs($el, options);
 
@@ -80,7 +80,7 @@
         var methodExists = (typeof($neoTabs.openDropdown) === 'function');
         expect(methodExists).toBe(true);
       });
-    });*/
+    });
 
     describe('Initialization', function () {
       var $el = $(fixture),
