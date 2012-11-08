@@ -112,6 +112,10 @@
         _this.tabsList.addTab(tab);
       }
 
+      $tabHeadElement
+        .parent('.' + _this.opts.tabBodyClass)
+        .attr('id', _this.generateId('accessibletabscontentbody', tabsCount, i));
+
       $tabHeadElement.attr({
         'id': tab.id,
         'class': _this.opts.tabHeadClass,
