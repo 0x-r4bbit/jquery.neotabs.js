@@ -98,6 +98,7 @@
       var tab = new Tab({
         label: $tabHeadElement.html(),
         id: _this.generateId('accessibletabscontent', tabsCount, i),
+        navigationId: _this.generateId('accessibletabsnavigation', tabsCount, i),
         tabsList: null,
         cssClass: (_this.opts.cssClassAvailable) ?
           (($tabHeadElement.attr('class') || '') + ' ' + _this.opts.tabHeadClass) :
@@ -122,7 +123,8 @@
     if (_this.hasDropdown) {
       _this.tabsList.addTab(new Tab({
         label: _this.opts.dropdownTabLabel,
-        id: '',
+        id: _this.generateId('accessibletabsdropdown', tabsCount),
+        navigationId: '',
         tabsList: _this.dropdownTabsList,
         cssClass: _this.opts.tabHeadClass + ' ' + _this.opts.dropdownTabClass
       }));
@@ -224,7 +226,12 @@
   NeoTabs.prototype = (function () {
 
     var generateId = function (name, tabsCount, tabCount) {
-      return name + tabsCount + '-' + tabCount;
+      var id = name + tabsCount;
+
+      if (tabCount !== undefined) {
+        id += '-' + tabCount;
+      }
+      return id;
     };
 
     return {
@@ -271,12 +278,13 @@
   function Tab(options) {
     this.label = options.label;
     this.id = options.id;
+    this.navigationId = options.navigationId;
     this.tabsList = options.tabsList;
     this.cssClass = options.cssClass;
   }
 
   Tab.prototype.toHtml = function () {
-    var html = '<li class="' + this.cssClass + '"><a href="#' + this.id + '" id="' + this.id + '">' + this.label + '</a>';
+    var html = '<li class="' + this.cssClass + '" id="' + this.navigationId + '"><a href="#' + this.id + '" id="' + this.id + '">' + this.label + '</a>';
  
     if (this.tabsList) {
       html += this.tabsList.toHtml();
