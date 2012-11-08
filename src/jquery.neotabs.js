@@ -202,7 +202,9 @@
               .removeClass(_this.opts.dropdownTabActiveClass);
 
             if (tabWithinDropdown) {
-              $parent.closest('.' + _this.opts.dropdownTabClass).addClass(_this.opts.dropdownTabActiveClass);
+              $parent
+                .closest('.' + _this.opts.dropdownTabClass)
+                .addClass(_this.opts.dropdownTabActiveClass);
             }
           }
 
