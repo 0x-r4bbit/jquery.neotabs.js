@@ -159,7 +159,10 @@
 
     // Which tab should be active?
     $tabsList.find(' > li:first')
-      .addClass(_this.opts.firstTabClass + ((!_this.hasPreActiveTab) ? ' ' + _this.opts.activeClass : ''))
+      .addClass(_this.opts.firstTabClass + ((!_this.hasPreActiveTab) ? 
+        ' ' + _this.opts.activeClass :
+        ''
+      ))
       .closest('ul').find('> li:last')
       .addClass(_this.opts.lastTabClass);
 
@@ -176,9 +179,12 @@
         var $parent = $(this).parent();
 
         if (!$parent.hasClass(_this.opts.activeClass)) {
-          $tabsList
-            .find('> li.' + _this.opts.activeClass)
-            .removeClass(_this.opts.activeClass);
+
+          if (!$parent.hasClass(_this.opts.dropdownTabClass)) {
+            $tabsList
+              .find('> li.' + _this.opts.activeClass)
+              .removeClass(_this.opts.activeClass);
+          }
 
           $parent.addClass(_this.opts.activeClass);
         } else {
@@ -202,7 +208,11 @@
           $(this).focus().keyup(function (e) {
             if (keyCodes[e.keyCode]) {
               if (_this.activateTab(
-                  _this.generateId('#'+'accessibletabscontent', _this.currentTabsCount, (j + keyCodes[e.keyCode]))
+                  _this.generateId(
+                    '#'+'accessibletabscontent',
+                    _this.currentTabsCount, 
+                    (j + keyCodes[e.keyCode]
+                  ))
               )) {
                 $(this).unbind('keyup');
               }
@@ -223,7 +233,11 @@
       $(this).focus(function () {
         $(document).keyup(function (e) {
           if (keyCodes[e.keyCode]) {
-            _this.activateTab('#'+_this.generateId('accessibletabscontent', _this.currentTabsCount, (i + keyCodes[e.keyCode])));
+            _this.activateTab(
+              '#'+_this.generateId('accessibletabscontent',
+              _this.currentTabsCount,
+              (i + keyCodes[e.keyCode])
+            ));
           }
         });
       });
@@ -257,6 +271,7 @@
     };
 
     return {
+
       activateTab: function (id) {
         var $tab = $(id);
         if ($tab.length > 0) {
@@ -265,9 +280,20 @@
         }
         return false;
       },
-      openDropdown: function () {
 
+      toggleDropdown: function () {
+        var id = this.$el.find('.' + this.opts.dropdownTabClass + '> a').attr('id');
+        return this.activateTab('#' + id);
       },
+
+      openDropdown: function () {
+        this.toggleDropdown();
+      },
+
+      closeDropdown: function () {
+        this.toggleDropdown();
+      },
+
       generateId: generateId
     };
   }());
