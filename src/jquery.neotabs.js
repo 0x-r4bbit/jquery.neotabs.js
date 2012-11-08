@@ -221,6 +221,15 @@
     tabsCount++;
   }
 
+  NeoTabs.prototype = (function () {
+
+    return {
+      activateTab: function (index) {
+
+      }
+    };
+  }());
+
   NeoTabs.prototype.activateTab = function (tabsCount, tabCount) {
     var $tab = $('#'+this.generateTabId(tabsCount, tabCount));
     if ($tab.length) {
