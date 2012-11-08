@@ -186,11 +186,10 @@
         e.preventDefault();
 
         var $parent = $(this).parent();
+        var isDropdownTab = !!($parent.hasClass(_this.opts.dropdownTabClass));
+        var tabWithinDropdown = !!$(this).closest('.' + _this.opts.dropdownTabClass).length;
 
         if (!$parent.hasClass(_this.opts.activeClass)) {
-
-          var isDropdownTab = !!($parent.hasClass(_this.opts.dropdownTabClass));
-          var tabWithinDropdown = !!$(this).closest('.' + _this.opts.dropdownTabClass).length;
 
           if (!isDropdownTab) {
             $tabsList
@@ -204,7 +203,9 @@
             if (tabWithinDropdown) {
               $parent
                 .closest('.' + _this.opts.dropdownTabClass)
-                .addClass(_this.opts.dropdownTabActiveClass);
+                .addClass(_this.opts.dropdownTabActiveClass)
+                .find('> a').focus();
+            } else {
             }
           } else {
             $parent.removeClass(_this.opts.dropdownTabActiveClass);
@@ -220,31 +221,8 @@
           }
         }
 
-        $(this).blur();
-
-        var j = i;
-
         if (!$parent.hasClass(_this.opts.dropdownTabClass)) {
           _this.$el.find('.' + _this.opts.tabBodyClass + ':visible').hide();
-
-          // little hack to because we have more tabHead then tabBodys
-          if ($(this).closest('.' + _this.opts.dropdownTabClass).length) {
-            j = i-1;
-          }
-
-          $(this).focus().keyup(function (e) {
-            if (keyCodes[e.keyCode]) {
-              if (_this.activateTab(
-                  generateId(
-                    '#'+'accessibletabscontent',
-                    _this.currentTabsCount, 
-                    (j + keyCodes[e.keyCode]
-                  ))
-              )) {
-                $(this).unbind('keyup');
-              }
-            }
-          });
 
           var tabBodyId = $(this).attr('id').replace('accessibletabscontent', 'accessibletabscontentbody');
           var $tabBody = _this.$el.find('#' + tabBodyId);
@@ -258,13 +236,10 @@
       });
 
       $(this).focus(function () {
-        $(document).keyup(function (e) {
-          if (keyCodes[e.keyCode]) {
-            _this.activateTab(
-              '#'+generateId('accessibletabscontent',
-              _this.currentTabsCount,
-              (i + keyCodes[e.keyCode])
-            ));
+        $(document).on('keyup', function (e) {
+          var $target = $(e.target);
+          if (e.keyCode === 32 && $target.parent().hasClass(_this.opts.dropdownTabClass)) {
+            _this.toggleDropdown();
           }
         });
       });
