@@ -143,8 +143,8 @@
 
     // Show the first tab content by default
     if ($content.length > 0) {
-      $content.hide();
-      $($content[0]).show();
+      $content.attr('aria-hidden', true).hide();
+      $($content[0]).attr('aria-hidden', false).show();
     }
 
     // Which tab should be active?
@@ -163,15 +163,17 @@
       $(this).on('click', function (e) {
         e.preventDefault();
 
-        if (!$(this).parent().hasClass(_this.opts.activeClass)) {
+        var $parent = $(this).parent();
+
+        if (!$parent.hasClass(_this.opts.activeClass)) {
           $tabsList
             .find('> li.' + _this.opts.activeClass)
             .removeClass(_this.opts.activeClass);
 
-          $(this).parent().addClass(_this.opts.activeClass);
+          $parent.addClass(_this.opts.activeClass);
         } else {
-          if ($(this).parent().hasClass(_this.opts.dropdownTabClass)) {
-            $(this).parent().removeClass(_this.opts.activeClass);
+          if ($parent.hasClass(_this.opts.dropdownTabClass)) {
+            $parent.removeClass(_this.opts.activeClass);
           }
         }
 
@@ -179,7 +181,7 @@
 
         var j = i;
 
-        if (!$(this).parent().hasClass(_this.opts.dropdownTabClass)) {
+        if (!$parent.hasClass(_this.opts.dropdownTabClass)) {
           _this.$el.find('.' + _this.opts.tabBodyClass + ':visible').hide();
 
           // little hack to because we have more tabHead then tabBodys
@@ -189,20 +191,26 @@
 
           $(this).focus().keyup(function (e) {
             if (keyCodes[e.keyCode]) {
-              if (_this.activateTab(_this.currentTabsCount, (j + keyCodes[e.keyCode]))) {
+              if (_this.activateTab(_this.generateId('accessibletabscontent', _this.currentTabsCount, (j + keyCodes[e.keyCode])))) {
                 $(this).unbind('keyup');
               }
             }
           });
 
-          _this.$el.find('.' + _this.opts.tabBodyClass).eq(j)[_this.opts.fx](_this.opts.fxSpeed);
+          var tabBodyId = $(this).attr('id').replace('accessibletabscontent', 'accessibletabscontentbody');
+          var $tabBody = _this.$el.find('#' + tabBodyId);
+
+          if ($tabBody.length > 0) {
+            _this.$el.find('.' + _this.opts.tabBodyClass).attr('aria-hidden', true);
+            $tabBody.attr('aria-hidden', false)[_this.opts.fx](_this.opts.fxSpeed);
+          }
         }
       });
 
       $(this).focus(function () {
         $(document).keyup(function (e) {
           if (keyCodes[e.keyCode]) {
-            _this.activateTab(_this.currentTabsCount, (i + keyCodes[e.keyCode]));
+            _this.activateTab(_this.generateId('accessibletabscontent', _this.currentTabsCount, (i + keyCodes[e.keyCode])));
           }
         });
       });
@@ -239,8 +247,8 @@
     };
 
     return {
-      activateTab: function (tabsCount, tabCount) {
-        var $tab = this.$el.find('#'+this.generateId('accessibletabscontent', tabsCount, tabCount));
+      activateTab: function (id) {
+        var $tab = this.$el.find('#' + id);
         if ($tab.length) {
           $tab.click();
           return true;
