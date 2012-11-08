@@ -30,6 +30,7 @@
         wrapInnerTabs: '',
         dropdownTabLabel: '&#x25BE;',
         dropdownTabClass: 'dropdown',
+        dropdownTabActiveClass: 'hidden-active',
         dropdownTabsListClass: 'tabs-list',
         dropdownTabsClearfixClass: 'group'
       },
@@ -188,16 +189,30 @@
 
         if (!$parent.hasClass(_this.opts.activeClass)) {
 
-          if (!$parent.hasClass(_this.opts.dropdownTabClass)) {
+          var isDropdownTab = !!($parent.hasClass(_this.opts.dropdownTabClass));
+          var tabWithinDropdown = !!$(this).closest('.' + _this.opts.dropdownTabClass).length;
+
+          if (!isDropdownTab) {
             $tabsList
-              .find('> li.' + _this.opts.activeClass)
+              .find('.' + _this.opts.activeClass)
               .removeClass(_this.opts.activeClass);
+
+            $tabsList
+              .find('.' + _this.opts.dropdownTabActiveClass)
+              .removeClass(_this.opts.dropdownTabActiveClass);
+
+            if (tabWithinDropdown) {
+              $parent.closest('.' + _this.opts.dropdownTabClass).addClass(_this.opts.dropdownTabActiveClass);
+            }
           }
 
           $parent.addClass(_this.opts.activeClass);
         } else {
           if ($parent.hasClass(_this.opts.dropdownTabClass)) {
             $parent.removeClass(_this.opts.activeClass);
+          }
+          if ($parent.hasClass(_this.opts.dropdownTabActiveClass)) {
+            $parent.removeClass(_this.opts.dropdownTabActiveClass);
           }
         }
 
@@ -291,7 +306,7 @@
 
       closeDropdown: function () {
         this.toggleDropdown();
-      },
+      }
     };
   }());
 
