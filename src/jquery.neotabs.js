@@ -45,6 +45,14 @@
         bottom: 'append'
       };
 
+  var generateId = function (name, tabsCount, tabCount) {
+    var id = name + tabsCount;
+
+    if (tabCount !== undefined) {
+      id += '-' + tabCount;
+    }
+    return id;
+  };
   // Helper function to check exclusively for an HTML5 data-attribute. Thanks to
   // @cburgdorf for typing down this gist for me: (https://gist.github.com/3979912)
   $.fn.hasDataAttr = function (attr) {
@@ -101,8 +109,8 @@
       // Build a new tab with all the options
       var tab = new Tab({
         label: $tabHeadElement.html(),
-        id: _this.generateId('accessibletabscontent', tabsCount, i),
-        navigationId: _this.generateId('accessibletabsnavigation', tabsCount, i),
+        id: generateId('accessibletabscontent', tabsCount, i),
+        navigationId: generateId('accessibletabsnavigation', tabsCount, i),
         tabsList: null,
         cssClass: (_this.opts.cssClassAvailable) ?
           (($tabHeadElement.attr('class') || '') + ' ' + _this.opts.tabHeadClass) :
@@ -122,7 +130,7 @@
       // Add an equivalent id to equivalent tabbody
       $tabHeadElement
         .parent('.' + _this.opts.tabBodyClass)
-        .attr('id', _this.generateId('accessibletabscontentbody', tabsCount, i));
+        .attr('id', generateId('accessibletabscontentbody', tabsCount, i));
 
       // Give the tabhead the following attributes
       $tabHeadElement.attr({
@@ -136,7 +144,7 @@
     if (_this.hasDropdown) {
       _this.tabsList.addTab(new Tab({
         label: _this.opts.dropdownTabLabel,
-        id: _this.generateId('accessibletabsdropdown', tabsCount),
+        id: generateId('accessibletabsdropdown', tabsCount),
         navigationId: '',
         tabsList: _this.dropdownTabsList,
         cssClass: _this.opts.tabHeadClass + ' ' + _this.opts.dropdownTabClass
@@ -208,7 +216,7 @@
           $(this).focus().keyup(function (e) {
             if (keyCodes[e.keyCode]) {
               if (_this.activateTab(
-                  _this.generateId(
+                  generateId(
                     '#'+'accessibletabscontent',
                     _this.currentTabsCount, 
                     (j + keyCodes[e.keyCode]
@@ -234,7 +242,7 @@
         $(document).keyup(function (e) {
           if (keyCodes[e.keyCode]) {
             _this.activateTab(
-              '#'+_this.generateId('accessibletabscontent',
+              '#'+generateId('accessibletabscontent',
               _this.currentTabsCount,
               (i + keyCodes[e.keyCode])
             ));
@@ -261,15 +269,6 @@
 
   NeoTabs.prototype = (function () {
 
-    var generateId = function (name, tabsCount, tabCount) {
-      var id = name + tabsCount;
-
-      if (tabCount !== undefined) {
-        id += '-' + tabCount;
-      }
-      return id;
-    };
-
     return {
 
       activateTab: function (id) {
@@ -293,8 +292,6 @@
       closeDropdown: function () {
         this.toggleDropdown();
       },
-
-      generateId: generateId
     };
   }());
 
