@@ -206,6 +206,8 @@
                 .closest('.' + _this.opts.dropdownTabClass)
                 .addClass(_this.opts.dropdownTabActiveClass);
             }
+          } else {
+            $parent.removeClass(_this.opts.dropdownTabActiveClass);
           }
 
           $parent.addClass(_this.opts.activeClass);
@@ -276,16 +278,13 @@
     if (_this.opts.autoAnchor && window.location.hash) {
       _this.activateTab(window.location.hash);
     }
-
     if (_this.hasPreActiveTab) {
       _this.activateTab('#' + _this.preActiveId);
     }
-
     tabsCount++;
   }
 
   NeoTabs.prototype = (function () {
-
     return {
 
       activateTab: function (id) {
