@@ -23,7 +23,7 @@ module.exports = function(grunt) {
       }
     },
     lint: {
-      files: ['src/**/*.js', 'test/**/*.js']
+      files: ['src/**/*.js', 'tests/unit/*.js']
     },
     watch: {
       files: '<config:lint.files>',
@@ -44,7 +44,15 @@ module.exports = function(grunt) {
         browser: true
       },
       globals: {
-        jQuery: true
+        jQuery: true,
+        $: true,
+        NeoTabs: true,
+        console: true,
+        it: true,
+        expect: true,
+        describe: true,
+        beforeEach: true,
+        afterEach: true
       }
     },
     uglify: {}

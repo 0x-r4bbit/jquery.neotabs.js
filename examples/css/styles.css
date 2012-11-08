@@ -37,6 +37,11 @@ body {
   position: relative;
 }
 
+.dropdown.hidden-active a {
+  background-color: #333;
+  color: #fff;
+}
+
 .dropdown.active .tabs-list {
   display: block;
 }

@@ -10,7 +10,7 @@ basePath = '';
 files = [
   JASMINE,
   JASMINE_ADAPTER,
-  '../lib/jquery-jasmine.js',
+  '../components/jasmine-jquery/lib/jasmine-jquery.js',
   '../components/jquery/jquery.js',
   '../src/jquery.neotabs.js',
   'unit/specs.js',
@@ -25,7 +25,7 @@ exclude = [
 
 // test results reporter to use
 // possible values: 'dots', 'progress', 'junit'
-reporters = ['progress'];
+reporters = ['dots'];
 
 
 // web server port
