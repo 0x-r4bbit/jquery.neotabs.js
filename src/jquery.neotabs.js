@@ -232,20 +232,20 @@
       });
 
       $(this).focus(function (e) {
-        var $target = $(e.target);
+        var $parent = $(e.target).parent();
         $(document).on('keyup', function (e) {
-          if ((e.keyCode === 32 || e.keyCode === 40)) {
-            _this.toggleDropdown();
-          }
-        });
-        /*if (!(isDropdownTab && $parent().hasClass(_this.opts.activeClass))) {
-          $(document).on('keyup', function (e) {
-            var $target = $(e.target);
-            if ((e.keyCode === 32 || e.keyCode === 40)) {
+          if ($parent.hasClass(_this.opts.dropdownTabClass)) {
+            if (e.keyCode === 32) {
               _this.toggleDropdown();
             }
-          });
-        }*/
+
+            if (!$parent.hasClass(_this.opts.activeClass)) {
+              if (e.keyCode === 40) {
+                _this.openDropdown();
+              }
+            }
+          }
+        });
       });
 
       $(this).blur(function () {
