@@ -143,7 +143,7 @@
 
       _this.ids.push(tab.id);
     });
- 
+
     // Generate dropdown tab if hasDropdown flag is true
     if (_this.hasDropdown) {
       _this.tabsList.addTab(new Tab({
@@ -155,7 +155,7 @@
       }));
     }
 
-    // [append/prepend] the generated tablist 
+    // [append/prepend] the generated tablist
     if (!_this.$el.find('.' + _this.opts.tabsListClass).length) {
       _this.$el[positions[_this.opts.tabsPosition]](_this.tabsList.toHtml());
     }
@@ -171,7 +171,7 @@
 
     // Which tab should be active?
     $tabsList.find(' > li:first')
-      .addClass(_this.opts.firstTabClass + ((!_this.hasPreActiveTab) ? 
+      .addClass(_this.opts.firstTabClass + ((!_this.hasPreActiveTab) ?
         ' ' + _this.opts.activeClass :
         ''
       ))
@@ -205,17 +205,14 @@
         } else {
           if (!isActive) {
             $parent.addClass(_this.opts.activeClass);
-            
+
             $(this).focus().on('keyup', function (e) {
               var id = $(this).attr('id'),
                   index = _this.ids.indexOf(id),
                   keyCode = keyCodes[e.keyCode];
 
-              if (keyCode && keyCode === 1) {
-                _this.openDropdown();
-              } else if (keyCode && keyCode === -1) {
-                console.log($parent);
-                _this.activateTab('#' + $parent.prev().find('a').attr('id'));
+              if (e.keyCode === 40) {
+                $parent.find('ul > li:first a').focus();
               }
             });
 
@@ -232,18 +229,7 @@
           $tabsList
             .find('.' + _this.opts.dropdownTabClass)
             .addClass(_this.opts.dropdownTabActiveClass)
-            .find('> a').focus().on('keyup', function (e) {
-              var id = $(this).attr('id'),
-                  index = _this.ids.indexOf(id),
-                  keyCode = keyCodes[e.keyCode];
-
-              if (keyCode && keyCode === 1) {
-                _this.openDropdown();
-              } else if (keyCode && keyCode === -1) {
-                console.log($parent);
-                _this.activateTab('#' + $parent.prev().find('a').attr('id'));
-              }
-            });
+            .find('> a').focus();
         }
 
         if (!isDropdownTab) {
@@ -258,25 +244,22 @@
             $tabBody.attr('aria-hidden', false)[_this.opts.fx](_this.opts.fxSpeed);
           }
         }
+        
+        if (!isDropdownTab) {
+          $(this).focus().on('keyup', function (e) {
+              var id = $(this).attr('id'),
+                  index = _this.ids.indexOf(id),
+                  keyCode = keyCodes[e.keyCode];
 
-        $(this).focus().on('keyup', function (e) {
-            var id = $(this).attr('id'),
-                index = _this.ids.indexOf(id),
-                keyCode = keyCodes[e.keyCode];
-
-            if (keyCode) {
-              if (keyCode === 1) {
-                if (!nextIsDropdown) {
-                 _this.activateTab('#' + _this.ids[index+keyCode]);
+              if (keyCode) {
+                if (nextIsDropdown && keyCode === 1) {
+                  _this.openDropdown();
                 } else {
-                  _this.openDropdown()
+                  _this.activateTab('#' + _this.ids[index+keyCode]);
                 }
               }
-              if (keyCode === -1) {
-              _this.activateTab('#' + _this.ids[index+keyCode]);
-              }
-            }
-        });
+          });
+        }
       });
 
       /*$(this).focus(function (e) {
@@ -370,7 +353,7 @@ console.log($(document).data('events'));
 
   Tab.prototype.toHtml = function () {
     var html = '<li class="' + this.cssClass + '" id="' + this.navigationId + '"><a href="#' + this.id + '" id="' + this.id + '">' + this.label + '</a>';
- 
+
     if (this.tabsList) {
       html += this.tabsList.toHtml();
     }
