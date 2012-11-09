@@ -189,36 +189,24 @@
         var isDropdownTab = !!($parent.hasClass(_this.opts.dropdownTabClass));
         var tabWithinDropdown = !!$(this).closest('.' + _this.opts.dropdownTabClass).length;
 
-        if (!$parent.hasClass(_this.opts.activeClass)) {
-
-          if (!isDropdownTab) {
-            $tabsList
-              .find('.' + _this.opts.activeClass)
-              .removeClass(_this.opts.activeClass);
-
-            $tabsList
-              .find('.' + _this.opts.dropdownTabActiveClass)
-              .removeClass(_this.opts.dropdownTabActiveClass);
-
-            if (tabWithinDropdown) {
-              $parent
-                .closest('.' + _this.opts.dropdownTabClass)
-                .addClass(_this.opts.dropdownTabActiveClass)
-                .find('> a').focus();
-            }
-          } else {
-            $parent.removeClass(_this.opts.dropdownTabActiveClass);
-          }
-
-          $parent.addClass(_this.opts.activeClass);
-        } else {
-          if ($parent.hasClass(_this.opts.dropdownTabClass)) {
-            $parent.removeClass(_this.opts.activeClass);
-          }
-          if ($parent.hasClass(_this.opts.dropdownTabActiveClass)) {
-            $parent.removeClass(_this.opts.dropdownTabActiveClass);
-          }
+        if (!isDropdownTab) {
+          $tabsList
+            .find('.' + _this.opts.activeClass)
+            .removeClass(_this.opts.activeClass);
         }
+
+        if (!tabWithinDropdown) {
+          $tabsList
+            .find('.' + _this.opts.dropdownTabActiveClass)
+            .removeClass(_this.opts.dropdownTabActiveClass);
+        } else {
+          $tabsList
+            .find('.' + _this.opts.dropdownTabClass)
+            .addClass(_this.opts.dropdownTabActiveClass)
+            .find('> a').focus();
+        }
+
+        $parent.addClass(_this.opts.activeClass);
 
         if (!$parent.hasClass(_this.opts.dropdownTabClass)) {
           _this.$el.find('.' + _this.opts.tabBodyClass + ':visible').hide();
