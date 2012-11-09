@@ -205,7 +205,6 @@
                 .closest('.' + _this.opts.dropdownTabClass)
                 .addClass(_this.opts.dropdownTabActiveClass)
                 .find('> a').focus();
-            } else {
             }
           } else {
             $parent.removeClass(_this.opts.dropdownTabActiveClass);
@@ -233,12 +232,13 @@
             $tabBody.attr('aria-hidden', false)[_this.opts.fx](_this.opts.fxSpeed);
           }
         }
+        $(this).focus();
       });
 
       $(this).focus(function () {
         $(document).on('keyup', function (e) {
           var $target = $(e.target);
-          if (e.keyCode === 32 && $target.parent().hasClass(_this.opts.dropdownTabClass)) {
+          if ((e.keyCode === 32 || e.keyCode === 40) && $target.parent().hasClass(_this.opts.dropdownTabClass)) {
             _this.toggleDropdown();
           }
         });
