@@ -185,14 +185,24 @@
       $(this).on('click', function (e) {
         e.preventDefault();
 
-        var $parent = $(this).parent();
-        var isDropdownTab = !!($parent.hasClass(_this.opts.dropdownTabClass));
-        var tabWithinDropdown = !!$(this).closest('.' + _this.opts.dropdownTabClass).length;
+        var $parent = $(this).parent(),
+            isActive = $parent.hasClass(_this.opts.activeClass),
+            isDropdownTab = $parent.hasClass(_this.opts.dropdownTabClass),
+            tabWithinDropdown = !!$(this).closest('.' + _this.opts.dropdownTabClass).length && !isDropdownTab;
+
 
         if (!isDropdownTab) {
           $tabsList
             .find('.' + _this.opts.activeClass)
             .removeClass(_this.opts.activeClass);
+
+            $parent.addClass(_this.opts.activeClass);
+        } else {
+          if (!isActive) {
+            $parent.addClass(_this.opts.activeClass);
+          } else {
+            $parent.removeClass(_this.opts.activeClass + ' ' + _this.opts.dropdownTabActiveClass);
+          }
         }
 
         if (!tabWithinDropdown) {
@@ -206,9 +216,8 @@
             .find('> a').focus();
         }
 
-        $parent.addClass(_this.opts.activeClass);
 
-        if (!$parent.hasClass(_this.opts.dropdownTabClass)) {
+        if (!isDropdownTab) {
           _this.$el.find('.' + _this.opts.tabBodyClass + ':visible').hide();
 
           var tabBodyId = $(this).attr('id').replace('accessibletabscontent', 'accessibletabscontentbody');
@@ -220,16 +229,23 @@
             $tabBody.attr('aria-hidden', false)[_this.opts.fx](_this.opts.fxSpeed);
           }
         }
-        $(this).focus();
       });
 
-      $(this).focus(function () {
+      $(this).focus(function (e) {
+        var $target = $(e.target);
         $(document).on('keyup', function (e) {
-          var $target = $(e.target);
-          if ((e.keyCode === 32 || e.keyCode === 40) && $target.parent().hasClass(_this.opts.dropdownTabClass)) {
+          if ((e.keyCode === 32 || e.keyCode === 40)) {
             _this.toggleDropdown();
           }
         });
+        /*if (!(isDropdownTab && $parent().hasClass(_this.opts.activeClass))) {
+          $(document).on('keyup', function (e) {
+            var $target = $(e.target);
+            if ((e.keyCode === 32 || e.keyCode === 40)) {
+              _this.toggleDropdown();
+            }
+          });
+        }*/
       });
 
       $(this).blur(function () {
