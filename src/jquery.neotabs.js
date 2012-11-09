@@ -78,7 +78,8 @@
       preActiveId: '',
       tabsList: null,
       dropdownTabsList: null,
-      currentTabsCount: tabsCount
+      currentTabsCount: tabsCount,
+      ids: []
     });
 
     _this.tabsList = new TabsList({
@@ -139,6 +140,8 @@
         'class': _this.opts.tabHeadClass,
         'tab-index': '-1'
       });
+
+      _this.ids.push(tab.id);
     });
  
     // Generate dropdown tab if hasDropdown flag is true
@@ -184,11 +187,13 @@
 
       $(this).on('click', function (e) {
         e.preventDefault();
+        $(this).unbind('keyup');
 
         var $parent = $(this).parent(),
             isActive = $parent.hasClass(_this.opts.activeClass),
             isDropdownTab = $parent.hasClass(_this.opts.dropdownTabClass),
-            tabWithinDropdown = !!$(this).closest('.' + _this.opts.dropdownTabClass).length && !isDropdownTab;
+            tabWithinDropdown = !!$(this).closest('.' + _this.opts.dropdownTabClass).length && !isDropdownTab,
+            nextIsDropdown = $parent.next().hasClass(_this.opts.dropdownTabClass);
 
 
         if (!isDropdownTab) {
@@ -200,6 +205,20 @@
         } else {
           if (!isActive) {
             $parent.addClass(_this.opts.activeClass);
+            
+            $(this).focus().on('keyup', function (e) {
+              var id = $(this).attr('id'),
+                  index = _this.ids.indexOf(id),
+                  keyCode = keyCodes[e.keyCode];
+
+              if (keyCode && keyCode === 1) {
+                _this.openDropdown();
+              } else if (keyCode && keyCode === -1) {
+                console.log($parent);
+                _this.activateTab('#' + $parent.prev().find('a').attr('id'));
+              }
+            });
+
           } else {
             $parent.removeClass(_this.opts.activeClass + ' ' + _this.opts.dropdownTabActiveClass);
           }
@@ -213,9 +232,19 @@
           $tabsList
             .find('.' + _this.opts.dropdownTabClass)
             .addClass(_this.opts.dropdownTabActiveClass)
-            .find('> a').focus();
-        }
+            .find('> a').focus().on('keyup', function (e) {
+              var id = $(this).attr('id'),
+                  index = _this.ids.indexOf(id),
+                  keyCode = keyCodes[e.keyCode];
 
+              if (keyCode && keyCode === 1) {
+                _this.openDropdown();
+              } else if (keyCode && keyCode === -1) {
+                console.log($parent);
+                _this.activateTab('#' + $parent.prev().find('a').attr('id'));
+              }
+            });
+        }
 
         if (!isDropdownTab) {
           _this.$el.find('.' + _this.opts.tabBodyClass + ':visible').hide();
@@ -229,11 +258,30 @@
             $tabBody.attr('aria-hidden', false)[_this.opts.fx](_this.opts.fxSpeed);
           }
         }
+
+        $(this).focus().on('keyup', function (e) {
+            var id = $(this).attr('id'),
+                index = _this.ids.indexOf(id),
+                keyCode = keyCodes[e.keyCode];
+
+            if (keyCode) {
+              if (keyCode === 1) {
+                if (!nextIsDropdown) {
+                 _this.activateTab('#' + _this.ids[index+keyCode]);
+                } else {
+                  _this.openDropdown()
+                }
+              }
+              if (keyCode === -1) {
+              _this.activateTab('#' + _this.ids[index+keyCode]);
+              }
+            }
+        });
       });
 
-      $(this).focus(function (e) {
+      /*$(this).focus(function (e) {
         var $parent = $(e.target).parent();
-        $(document).on('keyup', function (e) {
+        $(document).unbind('keyup').on('keyup', function (e) {
           if ($parent.hasClass(_this.opts.dropdownTabClass)) {
             if (e.keyCode === 32) {
               _this.toggleDropdown();
@@ -248,9 +296,10 @@
         });
       });
 
+console.log($(document).data('events'));
       $(this).blur(function () {
         $(document).unbind('keyup');
-      });
+      })*/;
     });
 
     // If we have an anchor in our url, trigger click event on the right tab
