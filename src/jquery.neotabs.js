@@ -35,12 +35,13 @@
         dropdownTabsClearfixClass: 'group'
       },
       tabsCount = 0,
-      keyCodes = {
-        37: -1,
-        38: -1,
-        39: +1,
-        40: +1
-      },
+      keyCodes = [
+        32, // space
+        37, // left
+        38, // up
+        39, // right
+        40 // down
+      ],
       positions = {
         top: 'prepend',
         bottom: 'append'
@@ -209,23 +210,31 @@
             $(this).focus().on('keyup', function (e) {
               var id = $(this).attr('id'),
                   index = _this.ids.indexOf(id),
-                  keyCode = keyCodes[e.keyCode];
+                  keyCode = e.keyCode;
 
-              if (e.keyCode === 40) {
-                $parent.find('ul > li:first a').focus();
+              if (keyCode === 37) {
+                _this.activateTab('#' + $parent.prev().find('a').attr('id'));
+              }
+              if (keyCode === 40) {
+                $parent.find('.' + _this.opts.dropdownTabsListClass + ' li:first a').focus();
               }
             });
-
           } else {
             $parent.removeClass(_this.opts.activeClass + ' ' + _this.opts.dropdownTabActiveClass);
           }
         }
 
         if (!tabWithinDropdown) {
+          console.log('niths within');
           $tabsList
             .find('.' + _this.opts.dropdownTabActiveClass)
             .removeClass(_this.opts.dropdownTabActiveClass);
         } else {
+console.log('yeah');
+          $(this).focus().on('keyup', function (e) {
+            console.log('keyup');
+          });
+
           $tabsList
             .find('.' + _this.opts.dropdownTabClass)
             .addClass(_this.opts.dropdownTabActiveClass)
@@ -244,20 +253,17 @@
             $tabBody.attr('aria-hidden', false)[_this.opts.fx](_this.opts.fxSpeed);
           }
         }
-        
+
         if (!isDropdownTab) {
           $(this).focus().on('keyup', function (e) {
-              var id = $(this).attr('id'),
-                  index = _this.ids.indexOf(id),
-                  keyCode = keyCodes[e.keyCode];
+            var id = $(this).attr('id'),
+                index = _this.ids.indexOf(id);
 
-              if (keyCode) {
-                if (nextIsDropdown && keyCode === 1) {
-                  _this.openDropdown();
-                } else {
-                  _this.activateTab('#' + _this.ids[index+keyCode]);
-                }
-              }
+            if (e.keyCode === 38 || e.keyCode === 39) {
+              _this.activateTab('#' + $parent.next().find('a').attr('id'));
+            } else if (e.keyCode === 37 || e.keyCode === 40) {
+              _this.activateTab('#' + $parent.prev().find('a').attr('id'));
+            }
           });
         }
       });
@@ -282,7 +288,7 @@
 console.log($(document).data('events'));
       $(this).blur(function () {
         $(document).unbind('keyup');
-      })*/;
+      })*/
     });
 
     // If we have an anchor in our url, trigger click event on the right tab
