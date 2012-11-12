@@ -2,7 +2,7 @@
   "name": "jquery.neotabs",
   "title": "jQuery NeoTabs",
   "description": "A flexible jQuery plugin for generating acessible tabs and tabs as dropdown inspired by Dirk Ginader's Accessible-Tabs",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "homepage": "https://github.com/PascalPrecht/jquery.neotabs.js",
   "author": {
     "name": "Pascal Precht",
