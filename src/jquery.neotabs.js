@@ -225,16 +225,10 @@
         }
 
         if (!tabWithinDropdown) {
-          console.log('niths within');
           $tabsList
             .find('.' + _this.opts.dropdownTabActiveClass)
             .removeClass(_this.opts.dropdownTabActiveClass);
         } else {
-console.log('yeah');
-          $(this).focus().on('keyup', function (e) {
-            console.log('keyup');
-          });
-
           $tabsList
             .find('.' + _this.opts.dropdownTabClass)
             .addClass(_this.opts.dropdownTabActiveClass)
@@ -285,7 +279,6 @@ console.log('yeah');
         });
       });
 
-console.log($(document).data('events'));
       $(this).blur(function () {
         $(document).unbind('keyup');
       })*/
