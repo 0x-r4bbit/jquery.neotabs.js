@@ -35,13 +35,6 @@
         dropdownTabsClearfixClass: 'group'
       },
       tabsCount = 0,
-      keyCodes = [
-        32, // space
-        37, // left
-        38, // up
-        39, // right
-        40 // down
-      ],
       positions = {
         top: 'prepend',
         bottom: 'append'
@@ -74,7 +67,7 @@
     $.extend(_this, {
       $el: element,
       opts: $.extend({}, defaults, options),
-      hasDropdown: false,
+      dropdown: false,
       hasPreActiveTab: false,
       preActiveId: '',
       tabsList: null,
@@ -95,12 +88,12 @@
       var $tabHeadElement = $(this);
 
       // Does our markup want us to make a dropdown?
-      if (!_this.hasDropdown && $tabHeadElement.hasDataAttr('neotabs-dropdown')) {
+      if (!_this.hasDropdown() && $tabHeadElement.hasDataAttr('neotabs-dropdown')) {
         _this.dropdownTabsList = new TabsList({
           clearfixClass: _this.opts.dropdownTabsClearfixClass,
           tabsListClass: _this.opts.dropdownTabsListClass
         });
-        _this.hasDropdown = true;
+        _this.dropdown = true;
       }
 
       // Is there a pre-active tab?
@@ -120,7 +113,7 @@
           _this.opts.tabHeadClass
       });
       // If we have a dropdown, add the tab to the dropdown list instead to the tabslist
-      if (_this.hasDropdown) {
+      if (_this.hasDropdown()) {
         _this.dropdownTabsList.addTab(tab);
       } else {
         _this.tabsList.addTab(tab);
@@ -146,7 +139,7 @@
     });
 
     // Generate dropdown tab if hasDropdown flag is true
-    if (_this.hasDropdown) {
+    if (_this.hasDropdown()) {
       _this.tabsList.addTab(new Tab({
         label: _this.opts.dropdownTabLabel,
         id: generateId('accessibletabsdropdown', tabsCount),
@@ -206,12 +199,10 @@
         } else {
           if (!isActive) {
             $parent.addClass(_this.opts.activeClass);
-
+ 
             $(this).focus().on('keyup', function (e) {
               var id = $(this).attr('id'),
-                  index = _this.ids.indexOf(id),
                   keyCode = e.keyCode;
-
               if (keyCode === 37) {
                 _this.activateTab('#' + $parent.prev().find('a').attr('id'));
               }
@@ -238,7 +229,10 @@
         if (!isDropdownTab) {
           _this.$el.find('.' + _this.opts.tabBodyClass + ':visible').hide();
 
-          var tabBodyId = $(this).attr('id').replace('accessibletabscontent', 'accessibletabscontentbody');
+          var tabBodyId = $(this)
+            .attr('id')
+            .replace('accessibletabscontent', 'accessibletabscontentbody');
+
           var $tabBody = _this.$el.find('#' + tabBodyId);
 
           // Show tab with equivalent id
@@ -247,41 +241,19 @@
             $tabBody.attr('aria-hidden', false)[_this.opts.fx](_this.opts.fxSpeed);
           }
         }
-
-        if (!isDropdownTab) {
-          $(this).focus().on('keyup', function (e) {
-            var id = $(this).attr('id'),
-                index = _this.ids.indexOf(id);
-
-            if (e.keyCode === 38 || e.keyCode === 39) {
-              _this.activateTab('#' + $parent.next().find('a').attr('id'));
-            } else if (e.keyCode === 37 || e.keyCode === 40) {
-              _this.activateTab('#' + $parent.prev().find('a').attr('id'));
-            }
-          });
-        }
+        $(this).focus();
       });
 
-      /*$(this).focus(function (e) {
+      $(this).focus(function (e) {
         var $parent = $(e.target).parent();
-        $(document).unbind('keyup').on('keyup', function (e) {
-          if ($parent.hasClass(_this.opts.dropdownTabClass)) {
-            if (e.keyCode === 32) {
-              _this.toggleDropdown();
-            }
-
-            if (!$parent.hasClass(_this.opts.activeClass)) {
-              if (e.keyCode === 40) {
-                _this.openDropdown();
-              }
-            }
+        $(this).unbind('keyup').on('keyup', function (e) {
+          if (e.keyCode === 38 || e.keyCode === 39) {
+            _this.activateTab('#' + $parent.next().find('a').attr('id'));
+          } else if (e.keyCode === 37 || e.keyCode === 40) {
+            _this.activateTab('#' + $parent.prev().find('a').attr('id'));
           }
         });
       });
-
-      $(this).blur(function () {
-        $(document).unbind('keyup');
-      })*/
     });
 
     // If we have an anchor in our url, trigger click event on the right tab
@@ -296,7 +268,6 @@
 
   NeoTabs.prototype = (function () {
     return {
-
       activateTab: function (id) {
         var $tab = $(id);
         if ($tab.length > 0) {
@@ -305,18 +276,18 @@
         }
         return false;
       },
-
       toggleDropdown: function () {
         var id = this.$el.find('.' + this.opts.dropdownTabClass + '> a').attr('id');
         return this.activateTab('#' + id);
       },
-
       openDropdown: function () {
         this.toggleDropdown();
       },
-
       closeDropdown: function () {
         this.toggleDropdown();
+      },
+      hasDropdown: function () {
+        return this.dropdown;
       }
     };
   }());
@@ -351,7 +322,13 @@
   }
 
   Tab.prototype.toHtml = function () {
-    var html = '<li class="' + this.cssClass + '" id="' + this.navigationId + '"><a href="#' + this.id + '" id="' + this.id + '">' + this.label + '</a>';
+    var html = '<li class="' + 
+      this.cssClass + '" id="' + 
+      this.navigationId + 
+      '"><a href="#' + 
+      this.id + '" id="' + 
+      this.id + '">' + 
+      this.label + '</a>';
 
     if (this.tabsList) {
       html += this.tabsList.toHtml();
