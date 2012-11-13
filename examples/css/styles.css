@@ -64,7 +64,7 @@ body {
   color: #fff;
 }
 
-.dropdown .tabs-list a:hover {
+.dropdown .tabs-list a:hover, .dropdown .tabs-list a:focus {
   background: #fff;
   color: #333;
 }

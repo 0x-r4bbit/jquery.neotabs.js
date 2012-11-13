@@ -186,9 +186,7 @@
         var $parent = $(this).parent(),
             isActive = $parent.hasClass(_this.opts.activeClass),
             isDropdownTab = $parent.hasClass(_this.opts.dropdownTabClass),
-            tabWithinDropdown = !!$(this).closest('.' + _this.opts.dropdownTabClass).length && !isDropdownTab,
-            nextIsDropdown = $parent.next().hasClass(_this.opts.dropdownTabClass);
-
+            tabWithinDropdown = !!$(this).closest('.' + _this.opts.dropdownTabClass).length && !isDropdownTab;
 
         if (!isDropdownTab) {
           $tabsList
@@ -199,17 +197,6 @@
         } else {
           if (!isActive) {
             $parent.addClass(_this.opts.activeClass);
- 
-            $(this).focus().on('keyup', function (e) {
-              var id = $(this).attr('id'),
-                  keyCode = e.keyCode;
-              if (keyCode === 37) {
-                _this.activateTab('#' + $parent.prev().find('a').attr('id'));
-              }
-              if (keyCode === 40) {
-                $parent.find('.' + _this.opts.dropdownTabsListClass + ' li:first a').focus();
-              }
-            });
           } else {
             $parent.removeClass(_this.opts.activeClass + ' ' + _this.opts.dropdownTabActiveClass);
           }
@@ -245,12 +232,50 @@
       });
 
       $(this).focus(function (e) {
+
         var $parent = $(e.target).parent();
+
         $(this).unbind('keyup').on('keyup', function (e) {
-          if (e.keyCode === 38 || e.keyCode === 39) {
-            _this.activateTab('#' + $parent.next().find('a').attr('id'));
-          } else if (e.keyCode === 37 || e.keyCode === 40) {
-            _this.activateTab('#' + $parent.prev().find('a').attr('id'));
+          // is $(this) a tab within a dropdown?
+          var tabWithinDropdown = $parent.parents().get(1).tagName === 'LI';
+
+          if (!tabWithinDropdown) {
+
+            if (e.keyCode === 39 || e.keyCode === 38) {
+              _this.activateTab('#' + $parent.next().find('a').attr('id'));
+            } 
+            if (e.keyCode === 37) {
+              _this.activateTab('#' + $parent.prev().find('a').attr('id'));
+            }
+
+            if ($parent.hasClass(_this.opts.dropdownTabClass)) {
+              if (!$parent.hasClass(_this.opts.activeClass)) {
+                if (e.keyCode === 40 || e.keyCode === 32) {
+                  _this.openDropdown();
+                }
+              } else {
+                if (e.keyCode === 40) {
+                  $parent.find('.' + _this.opts.tabsListClass + ' li:first a').focus();
+                }
+              }
+            } else {
+              if (e.keyCode === 40) {
+                _this.activateTab('#' + $parent.prev().find('a').attr('id'));
+              }
+            }
+          } else {
+            // Okay it's a tab within a dropdown
+
+            if (e.keyCode === 38) {
+              if ($parent.hasClass(_this.opts.firstTabClass)) {
+                $parent.closest('ul').parent().find('> a').focus();
+              } else {
+                $parent.prev().find('a').focus();
+              }
+            }
+            if (e.keyCode === 40) {
+              $parent.next().find('a').focus();
+            }
           }
         });
       });
