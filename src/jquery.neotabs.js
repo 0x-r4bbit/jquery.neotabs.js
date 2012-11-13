@@ -186,9 +186,7 @@
         var $parent = $(this).parent(),
             isActive = $parent.hasClass(_this.opts.activeClass),
             isDropdownTab = $parent.hasClass(_this.opts.dropdownTabClass),
-            tabWithinDropdown = !!$(this).closest('.' + _this.opts.dropdownTabClass).length && !isDropdownTab,
-            nextIsDropdown = $parent.next().hasClass(_this.opts.dropdownTabClass);
-
+            tabWithinDropdown = !!$(this).closest('.' + _this.opts.dropdownTabClass).length && !isDropdownTab;
 
         if (!isDropdownTab) {
           $tabsList
@@ -249,8 +247,22 @@
         $(this).unbind('keyup').on('keyup', function (e) {
           if (e.keyCode === 38 || e.keyCode === 39) {
             _this.activateTab('#' + $parent.next().find('a').attr('id'));
-          } else if (e.keyCode === 37 || e.keyCode === 40) {
+          } 
+          if (e.keyCode === 37) {
             _this.activateTab('#' + $parent.prev().find('a').attr('id'));
+          }
+          if ($parent.hasClass(_this.opts.dropdownTabClass)) {
+            if ($parent.hasClass(_this.opts.dropdownTabActiveClass) && !$parent.hasClass(_this.opts.activeClass)) {
+              _this.openDropdown()
+            } else {
+              if (e.keyCode === 40) {
+                $parent.find('.' + _this.opts.tabsListClass + ' li:first a').focus();
+              }
+            }
+          } else {
+            if (e.keyCode === 40) {
+              _this.activateTab('#' + $parent.prev().find('a').attr('id'));
+            }
           }
         });
       });
