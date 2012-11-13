@@ -261,7 +261,7 @@
 
             if ($parent.hasClass(_this.opts.dropdownTabClass)) {
               if (!$parent.hasClass(_this.opts.activeClass)) {
-                if (e.keyCode === 40 || e.keyCode == 32) {
+                if (e.keyCode === 40 || e.keyCode === 32) {
                   _this.openDropdown();
                 }
               } else {
