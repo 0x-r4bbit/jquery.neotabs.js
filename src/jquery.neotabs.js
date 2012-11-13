@@ -197,17 +197,6 @@
         } else {
           if (!isActive) {
             $parent.addClass(_this.opts.activeClass);
- 
-            $(this).focus().on('keyup', function (e) {
-              var id = $(this).attr('id'),
-                  keyCode = e.keyCode;
-              if (keyCode === 37) {
-                _this.activateTab('#' + $parent.prev().find('a').attr('id'));
-              }
-              if (keyCode === 40) {
-                $parent.find('.' + _this.opts.dropdownTabsListClass + ' li:first a').focus();
-              }
-            });
           } else {
             $parent.removeClass(_this.opts.activeClass + ' ' + _this.opts.dropdownTabActiveClass);
           }
