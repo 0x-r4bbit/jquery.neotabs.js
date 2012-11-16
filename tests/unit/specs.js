@@ -111,6 +111,52 @@
         expect($neoTabs.$el).toBe($el);
       });
 
+      describe('Options initialization', function () {
+        it('should have the right wrapperClass option', function () {
+          expect($neoTabs.opts.wrapperClass).toBe(options.wrapperClass);
+        });
+
+        it('should have the right activeClass option', function () {
+          expect($neoTabs.opts.activeClass).toBe(options.activeClass);
+        });
+
+        it('should have the right tabHeadClass option', function () {
+          expect($neoTabs.opts.tabHeadClass).toBe(options.tabHeadClass);
+        });
+
+        it('should have the right tabBodyClass option', function () {
+          expect($neoTabs.opts.tabBodyClass).toBe(options.tabBodyClass);
+        });
+
+        it('should have the right firstTabClass option', function () {
+          expect($neoTabs.opts.firstTabClass).toBe(options.firstTabClass);
+        });
+
+        it('should have the right lastTabClass option', function () {
+          expect($neoTabs.opts.lastTabClass).toBe(options.lastTabClass);
+        });
+
+        it('should have the right clearfixClass option', function () {
+          expect($neoTabs.opts.clearfixClass).toBe(options.clearfixClass);
+        });
+
+        it('should have the right tabsListClass option', function () {
+          expect($neoTabs.opts.tabsListClass).toBe(options.tabsListClass);
+        });
+
+        it('should have the right tabHeadElement option', function () {
+          expect($neoTabs.opts.tabHeadElement).toBe(options.tabHeadElement);
+        });
+
+        it('should have the right tabsPosition option', function () {
+          expect($neoTabs.opts.tabsPosition).toBe(options.tabsPosition);
+        });
+
+        it('should have the right cssClassAvailable option', function () {
+          expect($neoTabs.opts.cssClassAvailable).toBe(options.cssClassAvailable);
+        });
+      });
+
       it('should inject a content wrapper', function () {
         expect($neoTabs.$el).toContain('.' + options.wrapperClass);
       });
@@ -159,6 +205,11 @@
 
       it('should have a dropdown tab', function () {
         expect($neoTabs.$el).toContain('.' + options.dropdownTabClass);
+      });
+
+      it('should have a dropdown list', function () {
+        expect($neoTabs.$el.find('.'+options.dropdownTabClass).children('ul').length).toBe(1);
+        expect($neoTabs.$el.find('.' + options.dropdownTabClass).children('ul').hasClass(options.dropdownTabsListClass)).toBe(true);
       });
 
       it('should have a dropdownTabsList of two tabs', function () {
