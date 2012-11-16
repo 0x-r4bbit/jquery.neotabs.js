@@ -4,7 +4,7 @@
 
   describe('jQuery NeoTabs TestSuite', function () {
 
-    var fixture = '<div class="tabs">' +
+    var fixtureBasic = '<div class="tabs">' +
       '<div class="tabbody">' +
         '<h4 class="foo">Tabbody Heading</h4>' +
         '<p>Lorem Ipsum</p>' +
@@ -23,7 +23,26 @@
       '</div>' +
     '</div>';
 
-    var options = {
+    var fixtureDropdown = '<div class="tabs">' +
+      '<div class="tabbody">' +
+        '<h4 class="foo">Tabbody Heading</h4>' +
+        '<p>Lorem Ipsum</p>' +
+      '</div>' +
+      '<div class="tabbody">' +
+        '<h4>Tabbody Heading 2</h4>' +
+        '<p>Lorem Ipsum</p>' +
+      '</div>' +
+      '<div class="tabbody">' +
+        '<h4 data-neotabs-dropdown>Tabbody Heading 3</h4>' +
+        '<p>Lorem Ipsum</p>' +
+      '</div>' +
+      '<div class="tabbody">' +
+        '<h4>Tabbody Heading 4</h4>' +
+        '<p>Lorem Ipsum</p>' +
+      '</div>' +
+    '</div>';
+
+    var defaultOptions = {
       wrapperClass: 'content',
       activeClass: 'active',
       tabHeadClass: 'tabhead',
@@ -45,9 +64,11 @@
       dropdownTabsClearfixClass: 'group'
     };
 
+    var options;
+
 
     beforeEach(function () {
-      options = options;
+      options = defaultOptions;
     });
 
     describe('Setup', function () {
@@ -68,7 +89,7 @@
     });
 
     describe('Public API', function () {
-      var $el = $(fixture),
+      var $el = $(fixtureBasic),
           $neoTabs = new NeoTabs($el, options);
 
       it('should have a method to activate tabs', function () {
@@ -83,7 +104,7 @@
     });
 
     describe('Initialization', function () {
-      var $el = $(fixture),
+      var $el = $(fixtureBasic),
           $neoTabs = new NeoTabs($el, options);
 
       it('should assign an element', function () {
@@ -129,6 +150,21 @@
       it('should apply pre-existing class of tabhead by default', function () {
         expect($neoTabs.$el).toContain('.foo');
         expect($neoTabs.$el.find('.foo')).toBe('li');
+      });
+    });
+
+    describe('Dropdown initialization', function () {
+      var $el = $(fixtureDropdown),
+          $neoTabs = new NeoTabs($el, options);
+
+      it('should have a dropdown tab', function () {
+        expect($neoTabs.$el).toContain('.' + options.dropdownTabClass);
+      });
+
+      it('should have a dropdownTabsList of two tabs', function () {
+        expect(typeof($neoTabs.dropdownTabsList)).toBe('object');
+        expect(typeof($neoTabs.dropdownTabsList.tabs)).toBe('object');
+        expect($neoTabs.dropdownTabsList.tabs.length).toBe(2);
       });
     });
   });
