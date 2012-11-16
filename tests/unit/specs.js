@@ -60,6 +60,7 @@
       wrapInnerTabs: '',
       dropdownTabLabel: '&#x25BE;',
       dropdownTabClass: 'dropdown',
+      dropdownTabActiveClass: 'hidden-active',
       dropdownTabsListClass: 'tabs-list',
       dropdownTabsClearfixClass: 'group'
     };
@@ -154,6 +155,38 @@
 
         it('should have the right cssClassAvailable option', function () {
           expect($neoTabs.opts.cssClassAvailable).toBe(options.cssClassAvailable);
+        });
+
+        it('should have the right fx option', function () {
+          expect($neoTabs.opts.fx).toBe(options.fx);
+        });
+
+        it('should have the right autoAnchor option', function () {
+          expect($neoTabs.opts.autoAnchor).toBe(options.autoAnchor);
+        });
+
+        it('should have the right wrapInnerTabs option', function () {
+          expect($neoTabs.opts.wrapInnerTabs).toBe(options.wrapInnerTabs);
+        });
+
+        it('should have the right dropdownTabLabel option', function () {
+          expect($neoTabs.opts.dropdownTabLabel).toBe(options.dropdownTabLabel);
+        });
+
+        it('should have the right dropdownTabClass option', function () {
+          expect($neoTabs.opts.dropdownTabClass).toBe(options.dropdownTabClass);
+        });
+
+        it('should have the right dropdownTabActiveClass option', function () {
+          expect($neoTabs.opts.dropdownTabActiveClass).toBe(options.dropdownTabActiveClass);
+        });
+
+        it('should have the right dropdownTabsListClass option', function () {
+          expect($neoTabs.opts.dropdownTabsListClass).toBe(options.dropdownTabsListClass);
+        });
+
+        it('should have the right dropdownTabsListClearfixClass option', function () {
+          expect($neoTabs.opts.dropdownTabsListClearfixClass).toBe(options.dropdownTabsListClearfixClass);
         });
       });
 
