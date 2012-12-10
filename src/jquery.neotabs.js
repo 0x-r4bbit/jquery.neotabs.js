@@ -1,12 +1,3 @@
-/**
- * NeoTabs - jQuery plugin
- *
- * source: http://github.com/PascalPrecht/jquery.neotabs.js/
- * site: http://pascalprecht.github.com/jquery.neotabs.js/
- *
- * @author: Pascal Precht <pascal.precht@gmail.com>
- * Released under the MIT and GPL Licenses.
- */
 ;(function ($, window, undefined) {
 
   var pluginName = 'neoTabs',
@@ -60,7 +51,7 @@
   }
 
   $('body').data('accessibleTabsCount', tabsCount);
-
+  
   function NeoTabs(element, options) {
     var _this = this;
 
