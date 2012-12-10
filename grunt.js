@@ -27,7 +27,7 @@ module.exports = function(grunt) {
     },
     watch: {
       files: '<config:lint.files>',
-      tasks: 'lint'
+      tasks: 'lint test'
     },
     jshint: {
       options: {
@@ -55,8 +55,15 @@ module.exports = function(grunt) {
         afterEach: true
       }
     },
-    uglify: {}
+    uglify: {},
+    testacularServer: {
+      unit: {
+        configFile: 'tests/testacular.conf.js'
+      }
+    }
   });
+
+  grunt.loadNpmTasks('grunt-testacular');
 
   // Default task.
   grunt.registerTask('build', 'lint concat min');

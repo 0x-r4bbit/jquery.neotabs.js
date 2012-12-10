@@ -51,7 +51,7 @@
   }
 
   $('body').data('accessibleTabsCount', tabsCount);
-  
+
   function NeoTabs(element, options) {
     var _this = this;
 
@@ -234,7 +234,7 @@
 
             if (e.keyCode === 39 || e.keyCode === 38) {
               _this.activateTab('#' + $parent.next().find('a').attr('id'));
-            } 
+            }
             if (e.keyCode === 37) {
               _this.activateTab('#' + $parent.prev().find('a').attr('id'));
             }
@@ -338,12 +338,12 @@
   }
 
   Tab.prototype.toHtml = function () {
-    var html = '<li class="' + 
-      this.cssClass + '" id="' + 
-      this.navigationId + 
-      '"><a href="#' + 
-      this.id + '" id="' + 
-      this.id + '">' + 
+    var html = '<li class="' +
+      this.cssClass + '" id="' +
+      this.navigationId +
+      '"><a href="#' +
+      this.id + '" id="' +
+      this.id + '">' +
       this.label + '</a>';
 
     if (this.tabsList) {
