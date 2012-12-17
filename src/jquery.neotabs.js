@@ -2,6 +2,7 @@
 
   var pluginName = 'neoTabs',
       document = window.document,
+      $body = $('body'),
 
       defaults = {
         wrapperClass: 'content',
@@ -19,26 +20,19 @@
         fxSpeed: 0,
         autoAnchor: true,
         wrapInnerTabs: '',
+        wrapOuterTabsList: '',
         dropdownTabLabel: '&#x25BE;',
         dropdownTabClass: 'dropdown',
         dropdownTabActiveClass: 'hidden-active',
         dropdownTabsListClass: 'tabs-list',
         dropdownTabsClearfixClass: 'group'
       },
-      tabsCount = 0,
+      tabbableCount = ($body.data('tabbableCount') ? $body.data('tabbableCount') : 0),
       positions = {
         top: 'prepend',
         bottom: 'append'
       };
 
-  var generateId = function (name, tabsCount, tabCount) {
-    var id = name + tabsCount;
-
-    if (tabCount !== undefined) {
-      id += '-' + tabCount;
-    }
-    return id;
-  };
   // Helper function to check exclusively for an HTML5 data-attribute. Thanks to
   // @cburgdorf for typing down this gist for me: (https://gist.github.com/3979912)
   $.fn.hasDataAttr = function (attr) {
@@ -46,14 +40,35 @@
     return typeof value !== 'undefined' && value !== false;
   };
 
-  if ($('body').data('accessibleTabsCount') !== undefined) {
-    tabsCount = $('body').data('accessibleTabsCount');
-  }
+  $('body').data('tabbableCount', tabbableCount);
 
-  $('body').data('accessibleTabsCount', tabsCount);
+  var generateId = function (name, tabsCount, tabCount) {
+    var id = name + tabbableCount;
 
+    if (tabCount !== undefined) {
+      id += '-' + tabCount;
+    }
+    return id;
+  };
+
+  
   function NeoTabs(element, options) {
-    var _this = this;
+    var o = this,
+        _this = this,
+        $clone = element.clone();
+
+///////////////////////////
+    $.extend(o, {
+      options: $.extend({}, defaults, options)
+    });
+
+    $clone.wrapInner('<div class="' + o.options.wrapperClass + '"/>');
+
+    $clone.find(o.options.tabHeadElement).each(function (i) {
+
+    });
+
+//////////////////////////
 
     $.extend(_this, {
       $el: element,
@@ -63,16 +78,15 @@
       preActiveId: '',
       tabsList: null,
       dropdownTabsList: null,
-      currentTabsCount: tabsCount,
+      currentTabsCount: tabbableCount,
       ids: []
     });
-
     _this.tabsList = new TabsList({
       clearfixClass: _this.opts.clearfixClass,
       tabsListClass: _this.opts.tabsListClass
     });
 
-    _this.$el.wrapInner('<div class="' + _this.opts.wrapperClass + '"></div>');
+    _this.$el.wrapInner('<div class="' + _this.opts.wrapperClass + '"/>');
 
     _this.$el.find(_this.opts.tabHeadElement).each(function (i) {
 
@@ -96,8 +110,8 @@
       // Build a new tab with all the options
       var tab = new Tab({
         label: $tabHeadElement.html(),
-        id: generateId('accessibletabscontent', tabsCount, i),
-        navigationId: generateId('accessibletabsnavigation', tabsCount, i),
+        id: generateId('accessibletabscontent', tabbableCount, i),
+        navigationId: generateId('accessibletabsnavigation', tabbableCount, i),
         tabsList: null,
         cssClass: (_this.opts.cssClassAvailable) ?
           (($tabHeadElement.attr('class') || '') + ' ' + _this.opts.tabHeadClass) :
@@ -117,7 +131,7 @@
       // Add an equivalent id to equivalent tabbody
       $tabHeadElement
         .parent('.' + _this.opts.tabBodyClass)
-        .attr('id', generateId('accessibletabscontentbody', tabsCount, i));
+        .attr('id', generateId('accessibletabscontentbody', tabbableCount, i));
 
       // Give the tabhead the following attributes
       $tabHeadElement.attr({
@@ -133,7 +147,7 @@
     if (_this.hasDropdown()) {
       _this.tabsList.addTab(new Tab({
         label: _this.opts.dropdownTabLabel,
-        id: generateId('accessibletabsdropdown', tabsCount),
+        id: generateId('accessibletabsdropdown', tabbableCount),
         navigationId: '',
         tabsList: _this.dropdownTabsList,
         cssClass: _this.opts.tabHeadClass + ' ' + _this.opts.dropdownTabClass
@@ -279,7 +293,7 @@
     if (_this.hasPreActiveTab) {
       _this.activateTab('#' + _this.preActiveId);
     }
-    tabsCount++;
+    tabbableCount++;
   }
 
   NeoTabs.prototype = (function () {
