@@ -40,6 +40,11 @@
     return typeof value !== 'undefined' && value !== false;
   };
 
+  var hasDataAttr = function (obj, attr) {
+    var value = obj.getAttribute('data' + attr);
+    return typeof value !== 'undefined' && value !== false;
+  };
+
   $('body').data('tabbableCount', tabbableCount);
 
   var generateId = function (name, tabsCount, tabCount) {
@@ -51,25 +56,40 @@
     return id;
   };
 
-  
-  function NeoTabs(element, options) {
-    var o = this,
-        _this = this,
-        $clone = element.clone();
 
-///////////////////////////
+  function NeoTabs(element, options) {
+
+    var o = this;
+
     $.extend(o, {
       options: $.extend({}, defaults, options)
     });
 
-    $clone.wrapInner('<div class="' + o.options.wrapperClass + '"/>');
+    var _this = this,
+        _clone = element.clone(),
+        _tabHeadElements = _clone.find(o.options.tabHeadElement),
+        _len = _tabHeadElements.length,
+        _i = 0,
+        _tabsList = document.createElement('ul');
 
-    $clone.find(o.options.tabHeadElement).each(function (i) {
+    _clone.wrapInner('<div class="' + o.options.wrapperClass + '"/>');
 
-    });
+    _tabsList.setAttribute('css', [
+        o.options.clearfixClass, 
+        o.options.tabsListClass
+    ].join(' '));
 
-//////////////////////////
+    var list = '';
 
+    for (; _i < _len; _i++) {
+      var li = ['<li>', _tabHeadElements[_i].innerHTML, '</li>'];
+      list += li.join('');
+    }
+
+    _tabsList.innerHTML = list;
+
+    $body.prepend(_tabsList);
+console.dir(_tabsList);
     $.extend(_this, {
       $el: element,
       opts: $.extend({}, defaults, options),
@@ -296,31 +316,31 @@
     tabbableCount++;
   }
 
-  NeoTabs.prototype = (function () {
-    return {
-      activateTab: function (id) {
-        var $tab = $(id);
-        if ($tab.length > 0) {
-          $tab.click();
-          return true;
-        }
-        return false;
-      },
-      toggleDropdown: function () {
-        var id = this.$el.find('.' + this.opts.dropdownTabClass + '> a').attr('id');
-        return this.activateTab('#' + id);
-      },
-      openDropdown: function () {
-        this.toggleDropdown();
-      },
-      closeDropdown: function () {
-        this.toggleDropdown();
-      },
-      hasDropdown: function () {
-        return this.dropdown;
-      }
-    };
-  }());
+  NeoTabs.prototype.activateTab = function (id) {
+    var $tab = $(id);
+    if ($tab.length > 0) {
+      $tab.click();
+      return true;
+    }
+      return false;
+  };
+
+  NeoTabs.prototype.toggleDropdown = function () {
+    var id = this.$el.find('.' + this.opts.dropdownTabClass + '> a').attr('id');
+    return this.activateTab('#' + id);
+  };
+
+  NeoTabs.prototype.openDropdown = function () {
+    this.toggleDropdown();
+  };
+
+  NeoTabs.prototype.closeDropdown = function () {
+    this.toggleDropdown();
+  };
+
+  NeoTabs.prototype.hasDropdown = function () {
+    return this.dropdown;
+  };
 
   function TabsList(options) {
     this.tabs = [];
