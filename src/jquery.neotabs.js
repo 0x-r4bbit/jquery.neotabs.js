@@ -40,10 +40,22 @@
     return typeof value !== 'undefined' && value !== false;
   };
 
-  var hasDataAttr = function (obj, attr) {
-    var value = obj.getAttribute('data' + attr);
-    return typeof value !== 'undefined' && value !== false;
-  };
+  function hasDataAttr(obj, attr) {
+    var value = obj.getAttribute('data-' + attr);
+    console.dir(value !== null && value !== 'undefined' && value !== false);
+    return typeof value !== null && value !== 'undefined' && value !== false;
+  }
+
+  function toArray(collection) {
+    var i = 0,
+        a = [],
+        len = collection.length;
+
+    for (; i < len; i++) {
+      a[i] = collection[i];
+    }
+    return a;
+  }
 
   $('body').data('tabbableCount', tabbableCount);
 
@@ -59,37 +71,49 @@
 
   function NeoTabs(element, options) {
 
-    var o = this;
+    $.extend(this, {options: $.extend({}, defaults, options)});
 
-    $.extend(o, {
-      options: $.extend({}, defaults, options)
-    });
+    var o = this,
+        _this = this,
+        el = (element instanceof jQuery) ? element.get(0).cloneNode(true) : element.cloneNode(true),
+        tabHeads = el.querySelectorAll(o.options.tabHeadElement),
+        len = tabHeads.length,
+        i = 0,
+        tabsList = document.createElement('ul'),
+        dropdownTabsList = tabsList.cloneNode(),
+        hasDropdown = false;
 
-    var _this = this,
-        _clone = element.clone(),
-        _tabHeadElements = _clone.find(o.options.tabHeadElement),
-        _len = _tabHeadElements.length,
-        _i = 0,
-        _tabsList = document.createElement('ul');
+    tabsList.setAttribute('css', [o.options.clearfixClass, o.options.tabsListClass].join(' '));
 
-    _clone.wrapInner('<div class="' + o.options.wrapperClass + '"/>');
 
-    _tabsList.setAttribute('css', [
-        o.options.clearfixClass, 
-        o.options.tabsListClass
-    ].join(' '));
+    for (; i < len; i++) {
 
-    var list = '';
+      var tabHead = tabHeads[i],
+          li = ['<li>'];
 
-    for (; _i < _len; _i++) {
-      var li = ['<li>', _tabHeadElements[_i].innerHTML, '</li>'];
-      list += li.join('');
+      if (hasDataAttr(tabHead, 'neotabs-dropdown')) {
+        li.push(o.options.dropdownTabLabel);
+        li.push('<ul>');
+
+        for (j = i; j < len; j++) {
+
+          var ddTabHead = tabHeads[j];
+
+          li.push('<li>');
+          li.push(ddTabHead.innerHTML);
+          li.push('</li>');
+        }
+        li.push('</ul>');
+      } else {
+        li.push(tabHead.innerHTML)
+        li.push('</li>');
+      }
+
+      tabsList.innerHTML = li.join('');
     }
 
-    _tabsList.innerHTML = list;
+$body.prepend(tabsList);
 
-    $body.prepend(_tabsList);
-console.dir(_tabsList);
     $.extend(_this, {
       $el: element,
       opts: $.extend({}, defaults, options),
