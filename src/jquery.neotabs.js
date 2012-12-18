@@ -1,5 +1,20 @@
 ;(function ($, window, undefined) {
 
+var it = 50000;
+var document = window.document;
+var start = new Date().getTime();
+for (i = 0; i < it; ++i)  {
+  var e = document.createElement('div');
+/*var e = $( document.createElement('div') );  // ~300ms*/
+/*var e = $('<div>');                          // ~3100ms*/
+/*var e = $('<div></div>');                    // ~3200ms*/
+/*var e = $('<div/>');                         // ~3500ms*/
+
+
+}
+var end = new Date().getTime();
+console.log(end-start);
+
   var pluginName = 'neoTabs',
       document = window.document,
       $body = $('body'),
@@ -32,7 +47,7 @@
         top: 'prepend',
         bottom: 'append'
       };
-
+  
   // Helper function to check exclusively for an HTML5 data-attribute. Thanks to
   // @cburgdorf for typing down this gist for me: (https://gist.github.com/3979912)
   $.fn.hasDataAttr = function (attr) {
@@ -40,29 +55,6 @@
     return typeof value !== 'undefined' && value !== false;
   };
  
-
-  var hasAttribute = (function () {
-
-    if (!document.createElement().hasAttribute) {
-
-      return function (obj, attr) {
-        var value = obj.getAttribute(attr);
-        if (attr.split('-').indexOf('data') === 0 && value === '') { 
-          return true;
-        }
-        return !!value;
-      };
-    }
-
-    return function (obj, attr) {
-      return obj.hasAttribute(attr);
-    };
-  }());
-
-  function hasDataAttr(obj, attr) {
-    return hasAttribute(obj, 'data-' + attr);
-  }
-
   function toArray(collection) {
     var i = 0,
         a = [],
@@ -72,6 +64,28 @@
       a[i] = collection[i];
     }
     return a;
+  }
+
+  var hasAttribute = (function () {
+
+    // IE8 fallback
+    if (!document.createElement().hasAttribute) {
+
+      return function (obj, attr) {
+        var value = obj.getAttribute(attr);
+        if (attr.split('-').indexOf('data') === 0) { 
+          return value === '';
+        }
+        return !!value;
+      };
+    }
+    return function (obj, attr) {
+      return obj.hasAttribute(attr);
+    };
+  }());
+
+  function hasDataAttr(obj, attr) {
+    return hasAttribute(obj, 'data-' + attr);
   }
 
   $('body').data('tabbableCount', tabbableCount);
@@ -93,6 +107,7 @@
     var o = this,
         _this = this,
 
+        // Back to the roots!
         el = (element instanceof jQuery) ? 
           element.get(0).cloneNode(true) : 
           element.cloneNode(true),
@@ -104,6 +119,7 @@
         tabNoob = document.createElement('li'),
         anchorNoob = document.createElement('a'),
 
+        // I love this function nesting
         getTabClassList = (function () {
 
           if (!o.options.cssClassAvailable) {
@@ -124,7 +140,12 @@
 
         }());
 
-    tabsList.setAttribute('css', [o.options.clearfixClass, o.options.tabsListClass].join(' '));
+    tabsList.setAttribute('css', [
+      o.options.clearfixClass,
+      o.options.tabsListClass
+    ].join(' '));
+
+    var start1 = new Date().getTime();
 
     for (; i < len; i++) {
 
@@ -132,13 +153,14 @@
           tab = tabNoob.cloneNode(false),
           tabLabel = anchorNoob.cloneNode(false);
 
-
       if (!hasDataAttr(tabHead, 'neotabs-dropdown')) {
 
         tabLabel.innerHTML = tabHead.innerHTML;
+        tabLabel.href = '#accessibletabscontent-' + tabbableCount + '-' + i;
         tab.appendChild(tabLabel);
 
-        tab.setAttribute('css', getTabClassList(tabHead, tab));
+        tab.setAttribute('class', getTabClassList(tabHead, tab));
+        tab.id = 'accessibletabsnavigation-' + tabbableCount + '-' + i;
         tabsList.appendChild(tab);
       } else {
 
@@ -146,6 +168,8 @@
 
         tabLabel.innerHTML = o.options.dropdownTabLabel;
         tab.appendChild(tabLabel);
+        tab.setAttribute('class', getTabClassList(tabHead, tab));
+        tab.id = 'accessibletabsnavigation-' + tabbableCount + '-' + i;
 
         for (; j < len; j++) {
           var ddTab = tabNoob.cloneNode(false),
@@ -153,9 +177,11 @@
               ddTabHead = tabHeads[j];
 
           ddTabLabel.innerHTML = ddTabHead.innerHTML;
+          ddTabLabel.href = '#accessibletabscontent-' + tabbableCount + '-' + j;
           ddTab.appendChild(ddTabLabel);
+          ddTab.id = 'accessibletabsnavigation-' + tabbableCount + '-' + j;
 
-          ddTab.setAttribute('css', getTabClassList(ddTabHead, ddTab));
+          ddTab.setAttribute('class', getTabClassList(ddTabHead, ddTab));
           ddTabs.appendChild(ddTab);
         }
 
@@ -165,8 +191,10 @@
         break;
       }
     }
-
-$body.prepend(tabsList);
+    var end1 = new Date().getTime();
+/*console.log(start1);
+console.log(end1);
+console.log('Result new:', end1-start1);*/
 
     $.extend(_this, {
       $el: element,
@@ -185,6 +213,8 @@ $body.prepend(tabsList);
     });
 
     _this.$el.wrapInner('<div class="' + _this.opts.wrapperClass + '"/>');
+
+    var start2 = new Date().getTime();
 
     _this.$el.find(_this.opts.tabHeadElement).each(function (i) {
 
@@ -240,6 +270,11 @@ $body.prepend(tabsList);
 
       _this.ids.push(tab.id);
     });
+
+    var end2 = new Date().getTime();
+/*console.log(start2);
+console.log(end2);
+console.log('Result old:', end2-start2);*/
 
     // Generate dropdown tab if hasDropdown flag is true
     if (_this.hasDropdown()) {
