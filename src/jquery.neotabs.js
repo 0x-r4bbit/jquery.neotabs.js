@@ -1,20 +1,5 @@
 ;(function ($, window, undefined) {
 
-var it = 50000;
-var document = window.document;
-var start = new Date().getTime();
-for (i = 0; i < it; ++i)  {
-  var e = document.createElement('div');
-/*var e = $( document.createElement('div') );  // ~300ms*/
-/*var e = $('<div>');                          // ~3100ms*/
-/*var e = $('<div></div>');                    // ~3200ms*/
-/*var e = $('<div/>');                         // ~3500ms*/
-
-
-}
-var end = new Date().getTime();
-console.log(end-start);
-
   var pluginName = 'neoTabs',
       document = window.document,
       $body = $('body'),
@@ -145,8 +130,6 @@ console.log(end-start);
       o.options.tabsListClass
     ].join(' '));
 
-    var start1 = new Date().getTime();
-
     for (; i < len; i++) {
 
       var tabHead = tabHeads[i],
@@ -191,10 +174,6 @@ console.log(end-start);
         break;
       }
     }
-    var end1 = new Date().getTime();
-/*console.log(start1);
-console.log(end1);
-console.log('Result new:', end1-start1);*/
 
     $.extend(_this, {
       $el: element,
@@ -214,9 +193,7 @@ console.log('Result new:', end1-start1);*/
 
     _this.$el.wrapInner('<div class="' + _this.opts.wrapperClass + '"/>');
 
-    var start2 = new Date().getTime();
-
-    _this.$el.find(_this.opts.tabHeadElement).each(function (i) {
+    /*_this.$el.find(_this.opts.tabHeadElement).each(function (i) {
 
       var $tabHeadElement = $(this);
 
@@ -269,12 +246,8 @@ console.log('Result new:', end1-start1);*/
       });
 
       _this.ids.push(tab.id);
-    });
+    });*/
 
-    var end2 = new Date().getTime();
-/*console.log(start2);
-console.log(end2);
-console.log('Result old:', end2-start2);*/
 
     // Generate dropdown tab if hasDropdown flag is true
     if (_this.hasDropdown()) {
