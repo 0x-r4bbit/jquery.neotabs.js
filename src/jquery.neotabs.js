@@ -41,9 +41,7 @@
   };
 
   function hasDataAttr(obj, attr) {
-    var value = obj.getAttribute('data-' + attr);
-    console.dir(value !== null && value !== 'undefined' && value !== false);
-    return typeof value !== null && value !== 'undefined' && value !== false;
+    return obj.hasAttribute('data-' + attr);
   }
 
   function toArray(collection) {
@@ -75,45 +73,44 @@
 
     var o = this,
         _this = this,
-        el = (element instanceof jQuery) ? element.get(0).cloneNode(true) : element.cloneNode(true),
+        el = (element instanceof jQuery) ? element.get(0).cloneNode(true) 
+          : element.cloneNode(true),
         tabHeads = el.querySelectorAll(o.options.tabHeadElement),
         len = tabHeads.length,
         i = 0,
-        tabsList = document.createElement('ul'),
-        dropdownTabsList = tabsList.cloneNode(),
-        hasDropdown = false;
+        tabsList = document.createElement('ul');
 
     tabsList.setAttribute('css', [o.options.clearfixClass, o.options.tabsListClass].join(' '));
-
 
     for (; i < len; i++) {
 
       var tabHead = tabHeads[i],
           li = ['<li>'];
 
-      if (hasDataAttr(tabHead, 'neotabs-dropdown')) {
+      if (!hasDataAttr(tabHead, 'neotabs-dropdown')) {
+        li.push(tabHead.innerHTML);
+        li.push('</li>');
+
+        tabsList.innerHTML += li.join('');
+
+      } else {
         li.push(o.options.dropdownTabLabel);
         li.push('<ul>');
 
-        for (j = i; j < len; j++) {
-
-          var ddTabHead = tabHeads[j];
-
+        for (var j = i; j < len; j++) {
           li.push('<li>');
-          li.push(ddTabHead.innerHTML);
+          li.push(tabHeads[j].innerHTML);
           li.push('</li>');
         }
-        li.push('</ul>');
-      } else {
-        li.push(tabHead.innerHTML)
-        li.push('</li>');
-      }
 
-      tabsList.innerHTML = li.join('');
+        li.push('</ul>');
+        li.push('</li>');
+        tabsList.innerHTML += li.join('');
+        break;
+      }
     }
 
 $body.prepend(tabsList);
-
     $.extend(_this, {
       $el: element,
       opts: $.extend({}, defaults, options),
