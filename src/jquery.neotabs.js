@@ -39,9 +39,28 @@
     var value = this.attr('data-' + attr);
     return typeof value !== 'undefined' && value !== false;
   };
+ 
+
+  var hasAttribute = (function () {
+
+    if (!document.createElement().hasAttribute) {
+
+      return function (obj, attr) {
+        var value = obj.getAttribute(attr);
+        if (attr.split('-').indexOf('data') === 0 && value === '') { 
+          return true;
+        }
+        return !!value;
+      };
+    }
+
+    return function (obj, attr) {
+      return obj.hasAttribute(attr);
+    };
+  }());
 
   function hasDataAttr(obj, attr) {
-    return obj.hasAttribute('data-' + attr);
+    return hasAttribute(obj, 'data-' + attr);
   }
 
   function toArray(collection) {
@@ -73,44 +92,82 @@
 
     var o = this,
         _this = this,
-        el = (element instanceof jQuery) ? element.get(0).cloneNode(true) 
-          : element.cloneNode(true),
+
+        el = (element instanceof jQuery) ? 
+          element.get(0).cloneNode(true) : 
+          element.cloneNode(true),
+
         tabHeads = el.querySelectorAll(o.options.tabHeadElement),
         len = tabHeads.length,
         i = 0,
-        tabsList = document.createElement('ul');
+        tabsList = document.createElement('ul'),
+        tabNoob = document.createElement('li'),
+        anchorNoob = document.createElement('a'),
+
+        getTabClassList = (function () {
+
+          if (!o.options.cssClassAvailable) {
+            return function () {
+              return o.options.tabHeadClass;
+            };
+          }
+
+          return function (origObj, tabobj) {
+            if (hasAttribute(origObj, 'class')) {
+              return [
+                origObj.getAttribute('class'),
+                o.options.tabHeadClass
+              ].join(' ');
+            }
+            return o.options.tabHeadClass;
+          };
+
+        }());
 
     tabsList.setAttribute('css', [o.options.clearfixClass, o.options.tabsListClass].join(' '));
 
     for (; i < len; i++) {
 
       var tabHead = tabHeads[i],
-          li = ['<li>'];
+          tab = tabNoob.cloneNode(false),
+          tabLabel = anchorNoob.cloneNode(false);
+
 
       if (!hasDataAttr(tabHead, 'neotabs-dropdown')) {
-        li.push(tabHead.innerHTML);
-        li.push('</li>');
 
-        tabsList.innerHTML += li.join('');
+        tabLabel.innerHTML = tabHead.innerHTML;
+        tab.appendChild(tabLabel);
 
+        tab.setAttribute('css', getTabClassList(tabHead, tab));
+        tabsList.appendChild(tab);
       } else {
-        li.push(o.options.dropdownTabLabel);
-        li.push('<ul>');
 
-        for (var j = i; j < len; j++) {
-          li.push('<li>');
-          li.push(tabHeads[j].innerHTML);
-          li.push('</li>');
+        var ddTabs = tabsList.cloneNode(false), j = i;
+
+        tabLabel.innerHTML = o.options.dropdownTabLabel;
+        tab.appendChild(tabLabel);
+
+        for (; j < len; j++) {
+          var ddTab = tabNoob.cloneNode(false),
+              ddTabLabel = anchorNoob.cloneNode(false),
+              ddTabHead = tabHeads[j];
+
+          ddTabLabel.innerHTML = ddTabHead.innerHTML;
+          ddTab.appendChild(ddTabLabel);
+
+          ddTab.setAttribute('css', getTabClassList(ddTabHead, ddTab));
+          ddTabs.appendChild(ddTab);
         }
 
-        li.push('</ul>');
-        li.push('</li>');
-        tabsList.innerHTML += li.join('');
+        tab.appendChild(ddTabs);
+        tabsList.appendChild(tab);
+
         break;
       }
     }
 
 $body.prepend(tabsList);
+
     $.extend(_this, {
       $el: element,
       opts: $.extend({}, defaults, options),
@@ -366,7 +423,6 @@ $body.prepend(tabsList);
   function TabsList(options) {
     this.tabs = [];
     this.clearfixClass = options.clearfixClass;
-    this.tabsListClass = options.tabsListClass;
   }
 
   TabsList.prototype.addTab = function (tab) {
