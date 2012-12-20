@@ -27,7 +27,7 @@
             html.push('<p>Lorem Ipsum</p>');
             html.push('</div>');
             html.push('<div class=tabbody>');
-            html.push('<h4>Tabbody Heading 2</h4>');
+            html.push('<h4 data-neotabs-dropdown>Tabbody Heading 2</h4>');
             html.push('<p>Lorem Ipsum</p>');
             html.push('</div>');
             html.push('<div class=tabbody>');
@@ -43,7 +43,7 @@
 
           var append = [];
 
-            var x = 2;
+            var x = 1000;
 
             for (var i = 0; i < x; i++) {
               append.push(html);
@@ -51,10 +51,61 @@
 
             $('body').append(append.join(''));
 
-            var start1 = new Date().getTime();
+            var start = new Date().getTime();
             $('.tabs').neoTabs();
-            var end1 = new Date().getTime();
-            console.log('Result new:', end1-start1);
+            var end = new Date().getTime();
+            console.log("Result", end-start);
+/*var it = 150;
+            var start = new Date().getTime();
+            for (var i = 0; i < it;i++) {
+              var e = document.createDocumentFragment();
+            }
+            var end = new Date().getTime();
+            console.log("Fragment", end-start);
+
+            var start = new Date().getTime();
+            for (var i = 0; i < it;i++) {
+              var e = document.createElement('ul');
+            }
+            var end = new Date().getTime();
+            console.log("Native", end-start);
+
+            var start = new Date().getTime();
+            for (var i = 0; i < it;i++) {
+              var e = document.createElement('ul');
+              e = $(e);
+            }
+            var end = new Date().getTime();
+            console.log("Native -> jQuery", end-start);
+
+            var start = new Date().getTime();
+            for (var i = 0; i < it;i++) {
+              var e = $(document.createElement('ul'));
+            }
+            var end = new Date().getTime();
+            console.log("jQuery(Native)", end-start);
+
+            var start = new Date().getTime();
+            for (var i = 0; i < it;i++) {
+              var e = $('<ul>');
+            }
+            var end = new Date().getTime();
+            console.log("jQuery('string')", end-start);
+
+
+            var start = new Date().getTime();
+            for (var i = 0; i < it;i++) {
+               $('<ul>').html();
+            }
+            var end = new Date().getTime();
+            console.log(".html()", end-start);
+
+            var start = new Date().getTime();
+            for (var i = 0; i < it;i++) {
+               document.createElement('ul').innerHTML;
+            }
+            var end = new Date().getTime();
+            console.log(".innerHTML", end-start);*/
           });
         </script>
     </body>

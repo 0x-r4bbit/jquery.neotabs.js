@@ -33,6 +33,20 @@
         bottom: 'append'
       };
   
+  
+
+  $.fn.hasAttr = function(name) {
+    var i = 0,
+        l = this.length;
+
+    for (; i < l; i++) {
+      if ((this.attr( name ) !== undefined)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   // Helper function to check exclusively for an HTML5 data-attribute. Thanks to
   // @cburgdorf for typing down this gist for me: (https://gist.github.com/3979912)
   $.fn.hasDataAttr = function (attr) {
@@ -84,98 +98,89 @@
     return id;
   };
 
+  function buildTab(tabHead, tab, tabLink, index) {
+    tabLink.text(tabHead.text());
+    tabLink.attr('href', ['#accessibletabscontent-', tabbableCount, '-', index].join(''));
+    tab.append(tabLink);
+    tab.attr('id',['#accessibletabsnavigation-', tabbableCount, '-', index].join(''));
+    return tab;
+  }
 
   function NeoTabs(element, options) {
 
-    $.extend(this, {options: $.extend({}, defaults, options)});
+    var o = this;
 
-    var o = this,
-        _this = this,
+    $.extend(o, {options: $.extend({}, defaults, options)});
 
-        // Back to the roots!
-        el = (element instanceof jQuery) ? 
-          element.get(0).cloneNode(true) : 
-          element.cloneNode(true),
-
-        tabHeads = el.querySelectorAll(o.options.tabHeadElement),
-        len = tabHeads.length,
-        i = 0,
-        tabsList = document.createElement('ul'),
-        tabNoob = document.createElement('li'),
-        anchorNoob = document.createElement('a'),
-
-        // I love this function nesting
-        getTabClassList = (function () {
-
-          if (!o.options.cssClassAvailable) {
-            return function () {
-              return o.options.tabHeadClass;
-            };
+    var getClassList = (function () {
+      if (o.options.cssClassAvailable) {
+        return function (origObj, tabObj) {
+          if (origObj.hasAttr('class')) {
+            return [origObj.attr('class'), o.options.tabHeadClass].join();
           }
+          return o.options.tabHeadClass;
+        };
+      }
+      return function () {
+        return o.options.tabHeadClass;
+      };
+    }());
 
-          return function (origObj, tabobj) {
-            if (hasAttribute(origObj, 'class')) {
-              return [
-                origObj.getAttribute('class'),
-                o.options.tabHeadClass
-              ].join(' ');
-            }
-            return o.options.tabHeadClass;
-          };
+    var tabHeads = element.find(o.options.tabHeadElement),
+        len = tabHeads.length,
+        tabsList = $(document.createElement('ul'));
 
-        }());
-
-    tabsList.setAttribute('css', [
+    tabsList.attr('class', [
       o.options.clearfixClass,
       o.options.tabsListClass
     ].join(' '));
 
-    for (; i < len; i++) {
+    for (var i = 0; i < len; ++i) {
 
-      var tabHead = tabHeads[i],
-          tab = tabNoob.cloneNode(false),
-          tabLabel = anchorNoob.cloneNode(false);
+      var tabHead = $(tabHeads[i]),
+          tab = $(document.createElement('li')),
+          tabLink = $(document.createElement('a'));
 
-      if (!hasDataAttr(tabHead, 'neotabs-dropdown')) {
+      if (tabHead.hasDataAttr('neotabs-active')) {
+        tab.addClass(o.options.activeClass);
+      }
 
-        tabLabel.innerHTML = tabHead.innerHTML;
-        tabLabel.href = '#accessibletabscontent-' + tabbableCount + '-' + i;
-        tab.appendChild(tabLabel);
-
-        tab.setAttribute('class', getTabClassList(tabHead, tab));
-        tab.id = 'accessibletabsnavigation-' + tabbableCount + '-' + i;
-        tabsList.appendChild(tab);
+      if (!tabHead.hasDataAttr('neotabs-dropdown')) {
+        tab = buildTab(tabHead, tab, tabLink, i);
+        tab.addClass(getClassList(tabHead, tab));
+        tabsList.append(tab);
       } else {
+        var ddTabsList = $(document.createElement('ul')), j = i;
 
-        var ddTabs = tabsList.cloneNode(false), j = i;
+        tabLink.html(o.options.dropdownTabLabel);
+        tabLink.attr('href', '#');
+        tab.append(tabLink);
+        tab.attr('class', o.options.dropdownTabClass);
 
-        tabLabel.innerHTML = o.options.dropdownTabLabel;
-        tab.appendChild(tabLabel);
-        tab.setAttribute('class', getTabClassList(tabHead, tab));
-        tab.id = 'accessibletabsnavigation-' + tabbableCount + '-' + i;
+        ddTabsList.attr('class', [
+          o.options.dropdownTabsClearfixClass,
+          o.options.dropdownTabsListClass
+        ].join(' '));
 
         for (; j < len; j++) {
-          var ddTab = tabNoob.cloneNode(false),
-              ddTabLabel = anchorNoob.cloneNode(false),
-              ddTabHead = tabHeads[j];
+          var ddTabHead = $(tabHeads[j]),
+              ddTab = $(document.createElement('li')),
+              ddTabLink = $(document.createElement('a'));
 
-          ddTabLabel.innerHTML = ddTabHead.innerHTML;
-          ddTabLabel.href = '#accessibletabscontent-' + tabbableCount + '-' + j;
-          ddTab.appendChild(ddTabLabel);
-          ddTab.id = 'accessibletabsnavigation-' + tabbableCount + '-' + j;
-
-          ddTab.setAttribute('class', getTabClassList(ddTabHead, ddTab));
-          ddTabs.appendChild(ddTab);
+          ddTab = buildTab(ddTabHead, ddTab, ddTabLink, j);
+          ddTab.addClass(getClassList(ddTabHead, ddTab));
+          ddTabsList.append(ddTab);
         }
 
-        tab.appendChild(ddTabs);
-        tabsList.appendChild(tab);
+        tab.append(ddTabsList);
+        tabsList.append(tab);
 
         break;
       }
     }
 
-    $.extend(_this, {
+
+    /*$.extend(o, {
       $el: element,
       opts: $.extend({}, defaults, options),
       dropdown: false,
@@ -186,30 +191,30 @@
       currentTabsCount: tabbableCount,
       ids: []
     });
-    _this.tabsList = new TabsList({
-      clearfixClass: _this.opts.clearfixClass,
-      tabsListClass: _this.opts.tabsListClass
+    o.tabsList = new TabsList({
+      clearfixClass: o.opts.clearfixClass,
+      tabsListClass: o.opts.tabsListClass
     });
 
-    _this.$el.wrapInner('<div class="' + _this.opts.wrapperClass + '"/>');
+    o.$el.wrapInner('<div class="' + o.opts.wrapperClass + '"/>');
 
-    /*_this.$el.find(_this.opts.tabHeadElement).each(function (i) {
+    o.$el.find(o.opts.tabHeadElement).each(function (i) {
 
       var $tabHeadElement = $(this);
 
       // Does our markup want us to make a dropdown?
-      if (!_this.hasDropdown() && $tabHeadElement.hasDataAttr('neotabs-dropdown')) {
-        _this.dropdownTabsList = new TabsList({
-          clearfixClass: _this.opts.dropdownTabsClearfixClass,
-          tabsListClass: _this.opts.dropdownTabsListClass
+      if (!o.hasDropdown() && $tabHeadElement.hasDataAttr('neotabs-dropdown')) {
+        o.dropdownTabsList = new TabsList({
+          clearfixClass: o.opts.dropdownTabsClearfixClass,
+          tabsListClass: o.opts.dropdownTabsListClass
         });
-        _this.dropdown = true;
+        o.dropdown = true;
       }
 
       // Is there a pre-active tab?
-      if (!_this.hasPreActiveTab && $tabHeadElement.hasDataAttr('neotabs-active')) {
-        $tabHeadElement.addClass(_this.opts.activeClass);
-        _this.hasPreActiveTab = true;
+      if (!o.hasPreActiveTab && $tabHeadElement.hasDataAttr('neotabs-active')) {
+        $tabHeadElement.addClass(o.opts.activeClass);
+        o.hasPreActiveTab = true;
       }
 
       // Build a new tab with all the options
@@ -218,55 +223,55 @@
         id: generateId('accessibletabscontent', tabbableCount, i),
         navigationId: generateId('accessibletabsnavigation', tabbableCount, i),
         tabsList: null,
-        cssClass: (_this.opts.cssClassAvailable) ?
-          (($tabHeadElement.attr('class') || '') + ' ' + _this.opts.tabHeadClass) :
-          _this.opts.tabHeadClass
+        cssClass: (o.opts.cssClassAvailable) ?
+          (($tabHeadElement.attr('class') || '') + ' ' + o.opts.tabHeadClass) :
+          o.opts.tabHeadClass
       });
       // If we have a dropdown, add the tab to the dropdown list instead to the tabslist
-      if (_this.hasDropdown()) {
-        _this.dropdownTabsList.addTab(tab);
+      if (o.hasDropdown()) {
+        o.dropdownTabsList.addTab(tab);
       } else {
-        _this.tabsList.addTab(tab);
+        o.tabsList.addTab(tab);
       }
 
-      if (_this.hasPreActiveTab && _this.preActiveId === '') {
-        _this.preActiveId = tab.id;
+      if (o.hasPreActiveTab && o.preActiveId === '') {
+        o.preActiveId = tab.id;
       }
 
       // Add an equivalent id to equivalent tabbody
       $tabHeadElement
-        .parent('.' + _this.opts.tabBodyClass)
+        .parent('.' + o.opts.tabBodyClass)
         .attr('id', generateId('accessibletabscontentbody', tabbableCount, i));
 
       // Give the tabhead the following attributes
       $tabHeadElement.attr({
         'id': tab.id,
-        'class': _this.opts.tabHeadClass,
+        'class': o.opts.tabHeadClass,
         'tab-index': '-1'
       });
 
-      _this.ids.push(tab.id);
+      o.ids.push(tab.id);
     });*/
 
-
+/*
     // Generate dropdown tab if hasDropdown flag is true
-    if (_this.hasDropdown()) {
-      _this.tabsList.addTab(new Tab({
-        label: _this.opts.dropdownTabLabel,
+    if (o.hasDropdown()) {
+      o.tabsList.addTab(new Tab({
+        label: o.opts.dropdownTabLabel,
         id: generateId('accessibletabsdropdown', tabbableCount),
         navigationId: '',
-        tabsList: _this.dropdownTabsList,
-        cssClass: _this.opts.tabHeadClass + ' ' + _this.opts.dropdownTabClass
+        tabsList: o.dropdownTabsList,
+        cssClass: o.opts.tabHeadClass + ' ' + o.opts.dropdownTabClass
       }));
     }
 
     // [append/prepend] the generated tablist
-    if (!_this.$el.find('.' + _this.opts.tabsListClass).length) {
-      _this.$el[positions[_this.opts.tabsPosition]](_this.tabsList.toHtml());
+    if (!o.$el.find('.' + o.opts.tabsListClass).length) {
+      o.$el[positions[o.opts.tabsPosition]](o.tabsList.toHtml());
     }
 
-    var $content = _this.$el.find('.' + _this.opts.tabBodyClass),
-        $tabsList = _this.$el.find('.' + _this.opts.tabsListClass);
+    var $content = o.$el.find('.' + o.opts.tabBodyClass),
+        $tabsList = o.$el.find('.' + o.opts.tabsListClass);
 
     // Show the first tab content by default
     if ($content.length > 0) {
@@ -276,16 +281,16 @@
 
     // Which tab should be active?
     $tabsList.find(' > li:first')
-      .addClass(_this.opts.firstTabClass + ((!_this.hasPreActiveTab) ?
-        ' ' + _this.opts.activeClass :
+      .addClass(o.opts.firstTabClass + ((!o.hasPreActiveTab) ?
+        ' ' + o.opts.activeClass :
         ''
       ))
       .closest('ul').find('> li:last')
-      .addClass(_this.opts.lastTabClass);
+      .addClass(o.opts.lastTabClass);
 
 
-    if (_this.opts.wrapInnerTabs) {
-      $tabsList.find('> li > a').wrapInner(_this.opts.wrapInnerTabs);
+    if (o.opts.wrapInnerTabs) {
+      $tabsList.find('> li > a').wrapInner(o.opts.wrapInnerTabs);
     }
 
     $tabsList.find('> li a').each(function (i) {
@@ -295,48 +300,48 @@
         $(this).unbind('keyup');
 
         var $parent = $(this).parent(),
-            isActive = $parent.hasClass(_this.opts.activeClass),
-            isDropdownTab = $parent.hasClass(_this.opts.dropdownTabClass),
-            tabWithinDropdown = !!$(this).closest('.' + _this.opts.dropdownTabClass).length && !isDropdownTab;
+            isActive = $parent.hasClass(o.opts.activeClass),
+            isDropdownTab = $parent.hasClass(o.opts.dropdownTabClass),
+            tabWithinDropdown = !!$(this).closest('.' + o.opts.dropdownTabClass).length && !isDropdownTab;
 
         if (!isDropdownTab) {
           $tabsList
-            .find('.' + _this.opts.activeClass)
-            .removeClass(_this.opts.activeClass);
+            .find('.' + o.opts.activeClass)
+            .removeClass(o.opts.activeClass);
 
-            $parent.addClass(_this.opts.activeClass);
+            $parent.addClass(o.opts.activeClass);
         } else {
           if (!isActive) {
-            $parent.addClass(_this.opts.activeClass);
+            $parent.addClass(o.opts.activeClass);
           } else {
-            $parent.removeClass(_this.opts.activeClass + ' ' + _this.opts.dropdownTabActiveClass);
+            $parent.removeClass(o.opts.activeClass + ' ' + o.opts.dropdownTabActiveClass);
           }
         }
 
         if (!tabWithinDropdown) {
           $tabsList
-            .find('.' + _this.opts.dropdownTabActiveClass)
-            .removeClass(_this.opts.dropdownTabActiveClass);
+            .find('.' + o.opts.dropdownTabActiveClass)
+            .removeClass(o.opts.dropdownTabActiveClass);
         } else {
           $tabsList
-            .find('.' + _this.opts.dropdownTabClass)
-            .addClass(_this.opts.dropdownTabActiveClass)
+            .find('.' + o.opts.dropdownTabClass)
+            .addClass(o.opts.dropdownTabActiveClass)
             .find('> a').focus();
         }
 
         if (!isDropdownTab) {
-          _this.$el.find('.' + _this.opts.tabBodyClass + ':visible').hide();
+          o.$el.find('.' + o.opts.tabBodyClass + ':visible').hide();
 
           var tabBodyId = $(this)
             .attr('id')
             .replace('accessibletabscontent', 'accessibletabscontentbody');
 
-          var $tabBody = _this.$el.find('#' + tabBodyId);
+          var $tabBody = o.$el.find('#' + tabBodyId);
 
           // Show tab with equivalent id
           if ($tabBody.length > 0) {
-            _this.$el.find('.' + _this.opts.tabBodyClass).attr('aria-hidden', true);
-            $tabBody.attr('aria-hidden', false)[_this.opts.fx](_this.opts.fxSpeed);
+            o.$el.find('.' + o.opts.tabBodyClass).attr('aria-hidden', true);
+            $tabBody.attr('aria-hidden', false)[o.opts.fx](o.opts.fxSpeed);
           }
         }
         $(this).focus();
@@ -353,32 +358,32 @@
           if (!tabWithinDropdown) {
 
             if (e.keyCode === 39 || e.keyCode === 38) {
-              _this.activateTab('#' + $parent.next().find('a').attr('id'));
+              o.activateTab('#' + $parent.next().find('a').attr('id'));
             }
             if (e.keyCode === 37) {
-              _this.activateTab('#' + $parent.prev().find('a').attr('id'));
+              o.activateTab('#' + $parent.prev().find('a').attr('id'));
             }
 
-            if ($parent.hasClass(_this.opts.dropdownTabClass)) {
-              if (!$parent.hasClass(_this.opts.activeClass)) {
+            if ($parent.hasClass(o.opts.dropdownTabClass)) {
+              if (!$parent.hasClass(o.opts.activeClass)) {
                 if (e.keyCode === 40 || e.keyCode === 32) {
-                  _this.openDropdown();
+                  o.openDropdown();
                 }
               } else {
                 if (e.keyCode === 40) {
-                  $parent.find('.' + _this.opts.tabsListClass + ' li:first a').focus();
+                  $parent.find('.' + o.opts.tabsListClass + ' li:first a').focus();
                 }
               }
             } else {
               if (e.keyCode === 40) {
-                _this.activateTab('#' + $parent.prev().find('a').attr('id'));
+                o.activateTab('#' + $parent.prev().find('a').attr('id'));
               }
             }
           } else {
             // Okay it's a tab within a dropdown
 
             if (e.keyCode === 38) {
-              if ($parent.hasClass(_this.opts.firstTabClass)) {
+              if ($parent.hasClass(o.opts.firstTabClass)) {
                 $parent.closest('ul').parent().find('> a').focus();
               } else {
                 $parent.prev().find('a').focus();
@@ -393,12 +398,12 @@
     });
 
     // If we have an anchor in our url, trigger click event on the right tab
-    if (_this.opts.autoAnchor && window.location.hash) {
-      _this.activateTab(window.location.hash);
+    if (o.opts.autoAnchor && window.location.hash) {
+      o.activateTab(window.location.hash);
     }
-    if (_this.hasPreActiveTab) {
-      _this.activateTab('#' + _this.preActiveId);
-    }
+    if (o.hasPreActiveTab) {
+      o.activateTab('#' + o.preActiveId);
+    }*/
     tabbableCount++;
   }
 
