@@ -85,26 +85,35 @@
           tab = $(document.createElement('li')),
           tabLink = $(document.createElement('a'));
 
+      (i === 0) && tab.addClass(o.options.firstTabClass);
+
       if (tabHead.hasDataAttr('neotabs-active')) {
         tab.addClass(o.options.activeClass);
       }
 
       if (!tabHead.hasDataAttr('neotabs-dropdown')) {
         tabLink.html(tabHead.text());
-        tabLink.attr('href', ['accessibletabscontent-', tabbableCount, '-', i].join(' '));
+        tabLink.attr('href', ['#accessibletabscontent-', tabbableCount, '-', i].join(''));
 
         tab.append(tabLink);
         tab.addClass(getClassList(tabHead, tab));
-        tab.attr('id', ['accessibletabsnavigation-', tabbableCount, '-', i].join(' '));
-        tabsList.append(tab);
+        (i === len-1) && tab.addClass(o.options.lastTabClass);
+        tab.attr('id', ['accessibletabsnavigation-', tabbableCount, '-', i].join(''));
 
+        if (o.options.wrapInnerTabs) {
+          tab.replaceWith('<span class="'+o.options.wrapInnerTabs+'">'+tab.html()+'</span>');
+        }
+
+        tabsList.append(tab);
+        tabHead.parent().attr('id', ['#accessibletabscontent-', tabbableCount, '-', i].join(''));
       } else {
         var ddTabsList = $(document.createElement('ul')), j = i;
 
         tabLink.html(o.options.dropdownTabLabel);
         tabLink.attr('href', '#');
         tab.append(tabLink);
-        tab.attr('class', o.options.dropdownTabClass);
+        tab.addClass(o.options.tabHeadClass);
+        tab.addClass(o.options.dropdownTabClass);
 
         ddTabsList.attr('class', [
           o.options.dropdownTabsClearfixClass,
@@ -117,11 +126,18 @@
               ddTabLink = $(document.createElement('a'));
 
           ddTabLink.html(ddTabHead.text());
-          ddTabLink.attr('href', ['accessibletabscontent-', tabbableCount, '-', j].join(' '));
+          ddTabLink.attr('href', ['#accessibletabscontent-', tabbableCount, '-', j].join(''));
 
           ddTab.append(ddTabLink);
           ddTab.addClass(getClassList(ddTabHead, ddTab));
+
+          if (o.options.wrapInnerTabs) {
+            ddTab.replaceWith('<span class="'+o.options.wrapInnerTabs+'">'+ddTab.html()+'</span>');
+          }
+
+          ddTab.attr('id', ['accessibletabsnavigation-', tabbableCount, '-', j].join(''));
           ddTabsList.append(ddTab);
+          ddTabHead.parent().attr('id', ['#accessibletabscontent-', tabbableCount, '-', i].join(''));
         }
 
         tab.append(ddTabsList);
@@ -131,17 +147,51 @@
       }
     }
 
+    if (o.options.wrapOuterTabsList) {
+      tabsList = tabsList.wrap('<div class="'+o.options.wrapOuterTabsList+'" />').parent();
+    }
+
+
     clone[positions[o.options.tabsPosition]](tabsList);
 
     var content = clone.find('.' + o.options.tabBodyClass);
 
-    if (content.length) {
-      content.attr('aria-hidden', true).hide();
-      content.first().attr('aria-hidden', false).show();
-    }
+    content.attr('aria-hidden', true).hide();
+    content.first().attr('aria-hidden', false).show();
+
+    /*tabsList.on('click', 'li', function (e) {
+      var tab = $(this);
+
+      $(this).siblings().removeClass(o.options.activeClass);
+      $(this).addClass(o.options.activeClass);
+
+      $('.' + o.options.tabBodyClass).attr('aria-hidden', true);
+      $(tab.children()[0].hash).attr('aria-hidden', false).show();
+      //$(tab.children()[0].hash).attr('aria-hidden', false)[o.options.fx](o.options.fxSpeed);
+
+      /*if ($tabBody.length > 0) {
+        o.$el.find('.' + o.opts.tabBodyClass).attr('aria-hidden', true);
+        $tabBody.attr('aria-hidden', false)[o.opts.fx](o.opts.fxSpeed);
+      }
+    });*/
 
     element.replaceWith(clone);
 
+    tabsList.on('click', 'li', function (e) {
+      var tab = $(this);
+
+      $(this).siblings().removeClass(o.options.activeClass);
+      $(this).addClass(o.options.activeClass);
+
+      $('.' + o.options.tabBodyClass).attr('aria-hidden', true);
+      $(tab.children()[0].hash).attr('aria-hidden', false).show();
+      //$(tab.children()[0].hash).attr('aria-hidden', false)[o.options.fx](o.options.fxSpeed);
+
+      /*if ($tabBody.length > 0) {
+        o.$el.find('.' + o.opts.tabBodyClass).attr('aria-hidden', true);
+        $tabBody.attr('aria-hidden', false)[o.opts.fx](o.opts.fxSpeed);
+      }*/
+    });
     /*$.extend(o, {
       $el: element,
       opts: $.extend({}, defaults, options),

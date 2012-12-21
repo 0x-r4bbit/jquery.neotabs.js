@@ -52,7 +52,10 @@
             $('body').append(append.join(''));
 
             var start = new Date().getTime();
-            $('.tabs').neoTabs();
+            $('.tabs').neoTabs({
+              wrapInnerTabs: 'text',
+              wrapOuterTabsList: 'outer-tabslist'
+            });
             var end = new Date().getTime();
             console.log("Result", end-start);
 /*var it = 150;
