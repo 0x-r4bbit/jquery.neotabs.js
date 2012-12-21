@@ -1,8 +1,7 @@
-;(function ($, window, undefined) {
+;(function ($, window) {
 
   var pluginName = 'neoTabs',
       document = window.document,
-      $body = $('body'),
 
       defaults = {
         wrapperClass: 'content',
@@ -27,67 +26,17 @@
         dropdownTabsListClass: 'tabs-list',
         dropdownTabsClearfixClass: 'group'
       },
-      tabbableCount = ($body.data('tabbableCount') ? $body.data('tabbableCount') : 0),
+      tabbableCount =  0,
       positions = {
         top: 'prepend',
         bottom: 'append'
       };
-  
-  
-
-  $.fn.hasAttr = function(name) {
-    var i = 0,
-        l = this.length;
-
-    for (; i < l; i++) {
-      if ((this.attr( name ) !== undefined)) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   // Helper function to check exclusively for an HTML5 data-attribute. Thanks to
   // @cburgdorf for typing down this gist for me: (https://gist.github.com/3979912)
   $.fn.hasDataAttr = function (attr) {
     var value = this.attr('data-' + attr);
     return typeof value !== 'undefined' && value !== false;
   };
- 
-  function toArray(collection) {
-    var i = 0,
-        a = [],
-        len = collection.length;
-
-    for (; i < len; i++) {
-      a[i] = collection[i];
-    }
-    return a;
-  }
-
-  var hasAttribute = (function () {
-
-    // IE8 fallback
-    if (!document.createElement().hasAttribute) {
-
-      return function (obj, attr) {
-        var value = obj.getAttribute(attr);
-        if (attr.split('-').indexOf('data') === 0) { 
-          return value === '';
-        }
-        return !!value;
-      };
-    }
-    return function (obj, attr) {
-      return obj.hasAttribute(attr);
-    };
-  }());
-
-  function hasDataAttr(obj, attr) {
-    return hasAttribute(obj, 'data-' + attr);
-  }
-
-  $('body').data('tabbableCount', tabbableCount);
 
   var generateId = function (name, tabsCount, tabCount) {
     var id = name + tabbableCount;
@@ -98,14 +47,6 @@
     return id;
   };
 
-  function buildTab(tabHead, tab, tabLink, index) {
-    tabLink.text(tabHead.text());
-    tabLink.attr('href', ['#accessibletabscontent-', tabbableCount, '-', index].join(''));
-    tab.append(tabLink);
-    tab.attr('id',['#accessibletabsnavigation-', tabbableCount, '-', index].join(''));
-    return tab;
-  }
-
   function NeoTabs(element, options) {
 
     var o = this;
@@ -115,7 +56,7 @@
     var getClassList = (function () {
       if (o.options.cssClassAvailable) {
         return function (origObj, tabObj) {
-          if (origObj.hasAttr('class')) {
+          if (origObj.attr('class')) {
             return [origObj.attr('class'), o.options.tabHeadClass].join();
           }
           return o.options.tabHeadClass;
@@ -126,7 +67,8 @@
       };
     }());
 
-    var tabHeads = element.find(o.options.tabHeadElement),
+    var clone = element.clone(),
+        tabHeads = clone.find(o.options.tabHeadElement),
         len = tabHeads.length,
         tabsList = $(document.createElement('ul'));
 
@@ -134,6 +76,8 @@
       o.options.clearfixClass,
       o.options.tabsListClass
     ].join(' '));
+
+    clone.wrapInner('<div class="' + o.options.wrapperClass + '"/>');
 
     for (var i = 0; i < len; ++i) {
 
@@ -146,9 +90,14 @@
       }
 
       if (!tabHead.hasDataAttr('neotabs-dropdown')) {
-        tab = buildTab(tabHead, tab, tabLink, i);
+        tabLink.html(tabHead.text());
+        tabLink.attr('href', ['accessibletabscontent-', tabbableCount, '-', i].join(' '));
+
+        tab.append(tabLink);
         tab.addClass(getClassList(tabHead, tab));
+        tab.attr('id', ['accessibletabsnavigation-', tabbableCount, '-', i].join(' '));
         tabsList.append(tab);
+
       } else {
         var ddTabsList = $(document.createElement('ul')), j = i;
 
@@ -167,7 +116,10 @@
               ddTab = $(document.createElement('li')),
               ddTabLink = $(document.createElement('a'));
 
-          ddTab = buildTab(ddTabHead, ddTab, ddTabLink, j);
+          ddTabLink.html(ddTabHead.text());
+          ddTabLink.attr('href', ['accessibletabscontent-', tabbableCount, '-', j].join(' '));
+
+          ddTab.append(ddTabLink);
           ddTab.addClass(getClassList(ddTabHead, ddTab));
           ddTabsList.append(ddTab);
         }
@@ -179,6 +131,16 @@
       }
     }
 
+    clone[positions[o.options.tabsPosition]](tabsList);
+
+    var content = clone.find('.' + o.options.tabBodyClass);
+
+    if (content.length) {
+      content.attr('aria-hidden', true).hide();
+      content.first().attr('aria-hidden', false).show();
+    }
+
+    element.replaceWith(clone);
 
     /*$.extend(o, {
       $el: element,
@@ -251,9 +213,9 @@
       });
 
       o.ids.push(tab.id);
-    });*/
+    });
 
-/*
+
     // Generate dropdown tab if hasDropdown flag is true
     if (o.hasDropdown()) {
       o.tabsList.addTab(new Tab({
@@ -268,9 +230,9 @@
     // [append/prepend] the generated tablist
     if (!o.$el.find('.' + o.opts.tabsListClass).length) {
       o.$el[positions[o.opts.tabsPosition]](o.tabsList.toHtml());
-    }
+    }*/
 
-    var $content = o.$el.find('.' + o.opts.tabBodyClass),
+    /*var $content = o.$el.find('.' + o.opts.tabBodyClass),
         $tabsList = o.$el.find('.' + o.opts.tabsListClass);
 
     // Show the first tab content by default
@@ -291,9 +253,9 @@
 
     if (o.opts.wrapInnerTabs) {
       $tabsList.find('> li > a').wrapInner(o.opts.wrapInnerTabs);
-    }
+    }*/
 
-    $tabsList.find('> li a').each(function (i) {
+/*    $tabsList.find('> li a').each(function (i) {
 
       $(this).on('click', function (e) {
         e.preventDefault();
