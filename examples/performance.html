@@ -43,7 +43,7 @@
 
           var append = [];
 
-            var x = 10;
+            var x = 30;
 
             for (var i = 0; i < x; i++) {
               append.push(html);
@@ -53,8 +53,7 @@
 
             var start = new Date().getTime();
             $('.tabs').neoTabs({
-              wrapInnerTabs: 'text',
-              wrapOuterTabsList: 'outer-tabslist'
+              wrapInnerTabs: 'text'
             });
             var end = new Date().getTime();
             console.log("Result", end-start);

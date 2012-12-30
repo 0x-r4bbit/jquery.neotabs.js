@@ -105,6 +105,7 @@
         }
 
         tabsList.append(tab);
+        //console.dir(tabHead.parent());
         tabHead.parent().attr('id', ['#accessibletabscontent-', tabbableCount, '-', i].join(''));
       } else {
         var ddTabsList = $(document.createElement('ul')), j = i;
@@ -137,7 +138,8 @@
 
           ddTab.attr('id', ['accessibletabsnavigation-', tabbableCount, '-', j].join(''));
           ddTabsList.append(ddTab);
-          ddTabHead.parent().attr('id', ['#accessibletabscontent-', tabbableCount, '-', i].join(''));
+          //console.dir(ddTabHead.parent());
+          ddTabHead.parent().attr('id', ['#accessibletabscontent-', tabbableCount, '-', j].join(''));
         }
 
         tab.append(ddTabsList);
@@ -146,11 +148,10 @@
         break;
       }
     }
-
+ 
     if (o.options.wrapOuterTabsList) {
       tabsList = tabsList.wrap('<div class="'+o.options.wrapOuterTabsList+'" />').parent();
     }
-
 
     clone[positions[o.options.tabsPosition]](tabsList);
 
@@ -159,39 +160,28 @@
     content.attr('aria-hidden', true).hide();
     content.first().attr('aria-hidden', false).show();
 
-    /*tabsList.on('click', 'li', function (e) {
-      var tab = $(this);
+    tabsList.on('click', 'li', function (e) {
 
-      $(this).siblings().removeClass(o.options.activeClass);
-      $(this).addClass(o.options.activeClass);
+      e.preventDefault();
 
-      $('.' + o.options.tabBodyClass).attr('aria-hidden', true);
-      $(tab.children()[0].hash).attr('aria-hidden', false).show();
-      //$(tab.children()[0].hash).attr('aria-hidden', false)[o.options.fx](o.options.fxSpeed);
+      var _tab = $(this),
+          _hash = _tab.children()[0].hash;
+ 
+      _tab.addClass(o.options.activeClass);
+      console.dir(clone.find(_hash));
 
-      /*if ($tabBody.length > 0) {
-        o.$el.find('.' + o.opts.tabBodyClass).attr('aria-hidden', true);
-        $tabBody.attr('aria-hidden', false)[o.opts.fx](o.opts.fxSpeed);
-      }
-    });*/
+      clone.find('.content').children().each(function () {
+        console.dir($(this).attr('id'));
+      });
+
+
+//console.dir(clone.find(_tab.children()[0].hash));
+      clone.find('.' + o.options.tabBodyClass).attr('aria-hidden', true);
+      clone.find(tab.children()[0].hash).attr('aria-hidden', false)[o.options.fx](o.options.fxSpeed);
+    });
 
     element.replaceWith(clone);
 
-    tabsList.on('click', 'li', function (e) {
-      var tab = $(this);
-
-      $(this).siblings().removeClass(o.options.activeClass);
-      $(this).addClass(o.options.activeClass);
-
-      $('.' + o.options.tabBodyClass).attr('aria-hidden', true);
-      $(tab.children()[0].hash).attr('aria-hidden', false).show();
-      //$(tab.children()[0].hash).attr('aria-hidden', false)[o.options.fx](o.options.fxSpeed);
-
-      /*if ($tabBody.length > 0) {
-        o.$el.find('.' + o.opts.tabBodyClass).attr('aria-hidden', true);
-        $tabBody.attr('aria-hidden', false)[o.opts.fx](o.opts.fxSpeed);
-      }*/
-    });
     /*$.extend(o, {
       $el: element,
       opts: $.extend({}, defaults, options),
