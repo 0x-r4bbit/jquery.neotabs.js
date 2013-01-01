@@ -166,14 +166,23 @@
       var _tab = $(this),
           _hash = _tab.children()[0].hash;
 
-     tabsList.find('.'+o.options.activeClass).removeClass(o.options.activeClass);
-      _tab.addClass(o.options.activeClass);
-console.log(_tab);
-      if (_tab.hasClass(o.options.dropdownTabClass) && 
+      if (_tab.hasClass(o.options.dropdownTabClass) &&
         _tab.hasClass(o.options.activeClass)) {
-        console.log('dropdown');
+
         _tab.removeClass(o.options.activeClass);
+      } else {
+        console.log(tabsList.find('.'+o.options.activeClass));
+        tabsList.find('.'+o.options.activeClass).removeClass(o.options.activeClass);
+        _tab.addClass(o.options.activeClass);
       }
+
+
+
+
+      /*if (_tab.hasClass(o.options.dropdownTabClass) &&
+        _tab.hasClass(o.options.activeClass)) {
+        _tab.removeClass(o.options.activeClass);
+      }*/
 
       clone.find('.' + o.options.tabBodyClass).attr('aria-hidden', true);
       clone.find(tab.children()[0].hash).attr('aria-hidden', false)[o.options.fx](o.options.fxSpeed);
