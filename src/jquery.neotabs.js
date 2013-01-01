@@ -138,7 +138,6 @@
 
           ddTab.attr('id', ['accessibletabsnavigation-', tabbableCount, '-', j].join(''));
           ddTabsList.append(ddTab);
-          //console.dir(ddTabHead.parent());
           ddTabHead.parent().attr('id', ['#accessibletabscontent-', tabbableCount, '-', j].join(''));
         }
 
@@ -166,16 +165,16 @@
 
       var _tab = $(this),
           _hash = _tab.children()[0].hash;
- 
+
+     tabsList.find('.'+o.options.activeClass).removeClass(o.options.activeClass);
       _tab.addClass(o.options.activeClass);
-      console.dir(clone.find(_hash));
+console.log(_tab);
+      if (_tab.hasClass(o.options.dropdownTabClass) && 
+        _tab.hasClass(o.options.activeClass)) {
+        console.log('dropdown');
+        _tab.removeClass(o.options.activeClass);
+      }
 
-      clone.find('.content').children().each(function () {
-        console.dir($(this).attr('id'));
-      });
-
-
-//console.dir(clone.find(_tab.children()[0].hash));
       clone.find('.' + o.options.tabBodyClass).attr('aria-hidden', true);
       clone.find(tab.children()[0].hash).attr('aria-hidden', false)[o.options.fx](o.options.fxSpeed);
     });
