@@ -160,36 +160,27 @@
     content.first().attr('aria-hidden', false).show();
 
     tabsList.on('click', 'li', function (e) {
-
       e.preventDefault();
       e.stopPropagation();
-
+ 
       var _tab = $(this),
-          _hash = _tab.children()[0].hash;
+      _hash = _tab.children()[0].hash;
 
-      if (_tab.hasClass(o.options.dropdownTabClass) &&
+    if (_tab.hasClass(o.options.dropdownTabClass) &&
         _tab.hasClass(o.options.activeClass)) {
 
         _tab.removeClass(o.options.activeClass);
       } else {
-        console.log(tabsList.find('.'+o.options.activeClass));
         tabsList.find('.'+o.options.activeClass).removeClass(o.options.activeClass);
         _tab.addClass(o.options.activeClass);
       }
 
-
-
-
-      /*if (_tab.hasClass(o.options.dropdownTabClass) &&
-        _tab.hasClass(o.options.activeClass)) {
-        _tab.removeClass(o.options.activeClass);
-      }*/
-
       clone.find('.' + o.options.tabBodyClass).attr('aria-hidden', true);
-      clone.find(tab.children()[0].hash).attr('aria-hidden', false)[o.options.fx](o.options.fxSpeed);
+      clone.find(_hash).attr('aria-hidden', false)[o.options.fx](o.options.fxSpeed);
     });
 
     element.replaceWith(clone);
+
 
     /*$.extend(o, {
       $el: element,
