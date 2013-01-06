@@ -162,6 +162,7 @@
     tabsList.on('click', 'li', function (e) {
 
       e.preventDefault();
+      e.stopPropagation();
 
       var _tab = $(this),
           _hash = _tab.children()[0].hash;
