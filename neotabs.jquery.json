@@ -15,7 +15,8 @@
     }
   ],
   "dependencies": {
-    "jquery": "~1.8"
+    "jquery": "~1.8",
+    "jasmine-jquery": "*"
   },
   "keywords": ["tabs", "accessible", "dropdown"],
   "homepage": "https://github.com/PascalPrecht/jquery.neotabs.js",
