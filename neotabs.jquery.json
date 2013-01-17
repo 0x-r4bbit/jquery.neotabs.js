@@ -1,6 +1,6 @@
 {
   "name": "neotabs",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "title": "jQuery NeoTabs",
   "description": "A flexible jQuery plugin for generating acessible tabs and tabs as dropdown inspired by Dirk Ginader's Accessible-Tabs",
   "author": {

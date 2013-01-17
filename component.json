@@ -1,6 +1,6 @@
 {
   "name": "jquery.neotabs.js",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": ["./dist/jquery.neotabs.min.js"],
   "dependencies": {
     "jquery": "~1.8",
