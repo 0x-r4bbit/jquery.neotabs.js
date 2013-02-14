@@ -166,7 +166,7 @@
       var _tab = $(this),
       _hash = _tab.children()[0].hash;
 
-    if (_tab.hasClass(o.options.dropdownTabClass) &&
+      if (_tab.hasClass(o.options.dropdownTabClass) &&
         _tab.hasClass(o.options.activeClass)) {
 
         _tab.removeClass(o.options.activeClass);
@@ -176,6 +176,8 @@
       }
 
       clone.find('.' + o.options.tabBodyClass).attr('aria-hidden', true);
+      console.log(_hash);
+      console.dir(clone.find(_hash));
       clone.find(_hash).attr('aria-hidden', false)[o.options.fx](o.options.fxSpeed);
     });
 
@@ -278,7 +280,7 @@
     // Show the first tab content by default
     if ($content.length > 0) {
       $content.attr('aria-hidden', true).hide();
-      $($content[0]).attr('aria-hidden', false).show();
+    k $($content[0]).attr('aria-hidden', false).show();
     }
 
     // Which tab should be active?
