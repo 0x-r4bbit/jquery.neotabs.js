@@ -147,7 +147,7 @@
         break;
       }
     }
- 
+
     if (o.options.wrapOuterTabsList) {
       tabsList = tabsList.wrap('<div class="'+o.options.wrapOuterTabsList+'" />').parent();
     }
@@ -162,7 +162,7 @@
     tabsList.on('click', 'li', function (e) {
       e.preventDefault();
       e.stopPropagation();
-      
+
       var _tab = $(this),
       _hash = _tab.children()[0].hash;
 
@@ -179,7 +179,6 @@
         clone.find('.' + o.options.tabBodyClass).attr('aria-hidden', true).hide();
         clone.find(_hash).attr('aria-hidden', false)[o.options.fx](o.options.fxSpeed);
       }
-      
     });
 
     element.replaceWith(clone);
