@@ -106,7 +106,7 @@
 
         tabsList.append(tab);
         //console.dir(tabHead.parent());
-        tabHead.parent().attr('id', ['#accessibletabscontent-', tabbableCount, '-', i].join(''));
+        tabHead.parent().attr('id', ['accessibletabscontent-', tabbableCount, '-', i].join(''));
       } else {
         var ddTabsList = $(document.createElement('ul')), j = i;
 
@@ -138,7 +138,7 @@
 
           ddTab.attr('id', ['accessibletabsnavigation-', tabbableCount, '-', j].join(''));
           ddTabsList.append(ddTab);
-          ddTabHead.parent().attr('id', ['#accessibletabscontent-', tabbableCount, '-', j].join(''));
+          ddTabHead.parent().attr('id', ['accessibletabscontent-', tabbableCount, '-', j].join(''));
         }
 
         tab.append(ddTabsList);
@@ -162,7 +162,7 @@
     tabsList.on('click', 'li', function (e) {
       e.preventDefault();
       e.stopPropagation();
- 
+      
       var _tab = $(this),
       _hash = _tab.children()[0].hash;
 
@@ -175,10 +175,11 @@
         _tab.addClass(o.options.activeClass);
       }
 
-      clone.find('.' + o.options.tabBodyClass).attr('aria-hidden', true);
-      console.log(_hash);
-      console.dir(clone.find(_hash));
-      clone.find(_hash).attr('aria-hidden', false)[o.options.fx](o.options.fxSpeed);
+      if(_hash.length) {
+        clone.find('.' + o.options.tabBodyClass).attr('aria-hidden', true).hide();
+        clone.find(_hash).attr('aria-hidden', false)[o.options.fx](o.options.fxSpeed);
+      }
+      
     });
 
     element.replaceWith(clone);
