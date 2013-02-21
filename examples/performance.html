@@ -20,30 +20,29 @@
         <script src=../components/jquery/jquery.js></script>
         <script src=../src/jquery.neotabs.js></script>
         <script>
+
           $(function () {
-            var html = ['<div class=tabs>'];
-            html.push('<div class=tabbody>');
-            html.push('<h4>Tabbody Heading</h4>');
-            html.push('<p>Lorem Ipsum</p>');
-            html.push('</div>');
-            html.push('<div class=tabbody>');
-            html.push('<h4>Tabbody Heading 2</h4>');
-            html.push('<p>Lorem Ipsum</p>');
-            html.push('</div>');
-            html.push('<div class=tabbody>');
-            html.push('<h4 data-neotabs-dropdown>Tabbody Heading 3</h4>');
-            html.push('<p>Lorem Ipsum</p>');
-            html.push('</div>');
-            html.push('<div class=tabbody>');
-            html.push('<h4>Tabbody Heading 4</h4>');
-            html.push('<p>Lorem Ipsum</p>');
-            html.push('</div>');
+
+            var y = 50;
+
+            var html = [];
+            html.push('<div class=tabs>')
+            for (var i = 0; i < y; i++) {
+              html.push('<div class=tabbody>');
+              if (i === 3) {
+                html.push('<h4 data-neotabs-dropdown>Tabbody Heading '+(i+1)+'</h4>');
+              } else {
+                html.push('<h4>Tabbody Heading '+(i+1)+'</h4>');
+              }
+              html.push('<p>Lorem Ipsum '+(i+1)+'</p>');
+              html.push('</div>');
+            }
             html.push('</div>');
             html = html.join('');
 
-          var append = [];
+            var append = [];
 
-            var x = 1000;
+            var x = 100;
 
             for (var i = 0; i < x; i++) {
               append.push(html);
